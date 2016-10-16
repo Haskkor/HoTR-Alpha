@@ -112,6 +112,7 @@ class MultiLocalBattle:
                         elif isinstance(temp_return_init, bool):
                             remove_selected_hero = False
                             self.current_hero = self.init_bar.heroes_sorted[0]
+                            self.current_player = self.init_bar.heroes_sorted[0].player_name
                         # Traite les évènements si la visualisation du deck n'est pas ouverte
                         if self.deck_image_rect.collidepoint(mouse_pos):
                             remove_selected_hero = False
@@ -168,7 +169,10 @@ class MultiLocalBattle:
             if self.selected_hero is not None:
                 self.hero_details_zone.draw(self.screen, self.selected_hero)
             # Affiche la barre d'initiative
-            self.init_bar.draw(self.screen, mouse_pos, constants.Texts.PLAYER_1)
+            if self.current_player == self.fplayer_name:
+                self.init_bar.draw(self.screen, mouse_pos, self.fplayer_name)
+            else:
+                self.init_bar.draw(self.screen, mouse_pos, self.splayer_name)
             # Affiche la carte du deck et son texte
             self.screen.blit(self.deck_image, self.deck_image_rect)
             if self.deck_image_rect.collidepoint(mouse_pos):
