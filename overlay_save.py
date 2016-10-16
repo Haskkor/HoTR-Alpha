@@ -81,7 +81,7 @@ class OverlaySave:
         # Affiche l'overlay, les boutons et le texte
         self.screen.blit(self.overlay, (0, 0))
         for button in self.list_buttons:
-            button.draw()
+            button.draw(self.screen, mouse_pos)
         self.screen.blit(self.text, self.text_rect)
         self.text_box.draw(self.screen)
         self.text_box.update()

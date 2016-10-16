@@ -116,13 +116,22 @@ class MultiLocalBattle:
                         if self.deck_image_rect.collidepoint(mouse_pos):
                             remove_selected_hero = False
                             self.deck_open = True
-                            self.deck_visualization.calculate_hand_size()
+                            if self.current_player == self.fplayer_name:
+                                self.fplayer_deck_visualization.calculate_hand_size()
+                            else:
+                                self.splayer_deck_visualization.calculate_hand_size()
                         # Permet de tirer une nouvelle carte
                         elif self.button_draw.rect.collidepoint(mouse_pos) and self.button_draw.active:
-                            self.deck_visualization.draw_new_card()
+                            if self.current_player == self.fplayer_name:
+                                self.fplayer_deck_visualization.draw_new_card()
+                            else:
+                                self.splayer_deck_visualization.draw_new_card()
                     # Traite les évènements de la visualisation du deck
                     else:
-                        temp_selected_card = self.deck_visualization.get_event(event, mouse_pos)
+                        if self.current_player == self.fplayer_name:
+                            temp_selected_card = self.fplayer_deck_visualization.get_event(event, mouse_pos)
+                        else:
+                            temp_selected_card = self.splayer_deck_visualization.get_event(event, mouse_pos)
                         if temp_selected_card is not None:
                             remove_selected_hero = False
                             self.deck_open = False
@@ -180,7 +189,10 @@ class MultiLocalBattle:
                 self.screen.blit(self.button_draw.render_inactive, self.button_draw.rect)
         # Affiche la visualisation des cartes du deck
         else:
-            self.deck_visualization.draw(self.screen, mouse_pos)
+            if self.current_player == self.fplayer_name:
+                self.fplayer_deck_visualization.draw(self.screen, mouse_pos)
+            else:
+                self.splayer_deck_visualization.draw(self.screen, mouse_pos)
         self.clock.tick(constants.Framerate.FRAMERATE)
         pygame.display.flip()
 
@@ -208,17 +220,17 @@ class MultiLocalBattle:
                 if self.selected_hero is not None and self.battlefield[i][j].hero == self.selected_hero:
                     self.selected_hero.pos_bf_i = i
                     self.selected_hero.pos_bf_j = j
-                    if self.battlefield[i][j].hero.player_name == self.player:
+                    if self.battlefield[i][j].hero.player_name == self.current_player:
                         self.battlefield[i][j].render_hero_selected()
                     else:
                         self.battlefield[i][j].render_foe_selected()
                 elif self.battlefield[i][j].rect.collidepoint(mouse_pos) and self.battlefield[i][j].hero is not None:
-                    if self.battlefield[i][j].hero.player_name == self.player:
+                    if self.battlefield[i][j].hero.player_name == self.current_player:
                         self.battlefield[i][j].render_hero_hovered()
                     else:
                         self.battlefield[i][j].render_foe_hovered()
                 elif self.battlefield[i][j].hero is not None:
-                    if self.battlefield[i][j].hero.player_name == self.player:
+                    if self.battlefield[i][j].hero.player_name == self.current_player:
                         self.battlefield[i][j].render_hero()
                     else:
                         self.battlefield[i][j].render_foe()
@@ -234,8 +246,13 @@ class MultiLocalBattle:
         """
         Met à jour l'état du bouton pour tirer une carte
         """
-        if len(self.deck_visualization.deck) < 1:
-            self.button_draw.active = False
+
+        if self.current_player == self.fplayer_name:
+            if len(self.fplayer_deck_visualization.deck) < 1:
+                self.button_draw.active = False
+        else:
+            if len(self.splayer_deck_visualization.deck) < 1:
+                self.button_draw.active = False
 
     def run(self):
         done = False

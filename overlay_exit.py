@@ -70,7 +70,7 @@ class OverlayExit:
         self.screen.blit(self.overlay, (0, 0))
         self.screen.blit(self.modal, self.modalpos)
         for button in self.list_buttons:
-            button.draw()
+            button.draw(self.screen, mouse_pos)
         self.screen.blit(self.text_1, self.text_1_rect)
         self.screen.blit(self.text_2, self.text_2_rect)
         self.clock.tick(constants.Framerate.FRAMERATE)

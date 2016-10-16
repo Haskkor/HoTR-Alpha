@@ -252,7 +252,7 @@ class TeamSelection:
         self.screen.blit(self.render_text_name, self.render_text_name_rect)
         # Affiche les boutons texte
         for button in self.list_buttons_text:
-            button.draw()
+            button.draw(self.screen, mouse_pos)
         # Affiche les boutons image
         for button in self.list_buttons_image:
             button.draw(self.screen, mouse_pos)

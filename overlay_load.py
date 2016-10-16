@@ -166,7 +166,7 @@ class OverlayLoad:
         # Affiche l'overlay, les boutons et le texte
         self.screen.blit(self.overlay, (0, 0))
         for button in self.list_buttons:
-            button.draw()
+            button.draw(self.screen, mouse_pos)
         self.screen.blit(self.text, self.text_rect)
         pygame.draw.rect(self.screen, constants.Colors.WHITE, (self.screen.get_rect().centerx -
                                                                self.screen.get_rect().width / 8,
@@ -177,7 +177,7 @@ class OverlayLoad:
                          constants.Modals.FRAME_LOAD_THICK)
         # Affiche les boutons image
         for button in self.list_buttons_image:
-            button.draw()
+            button.draw(self.screen, mouse_pos)
         # Affiche la liste des sauvegardes
         for ind in range(self.start_list_saves, self.end_list_saves):
             self.list_saves_text_rects[ind].left = self.screen.get_rect().centerx - self.screen.get_rect().width / 8 + \
