@@ -22,6 +22,8 @@ class MultiLocalBattle:
     FENETRE DE BATAILLE DEUX JOUEURS EN LOCAL
     """
 
+    # TEST GIT AVEC PYCHARM
+
     def __init__(self, screen, clock, fplayer_name, splayer_name, fplayer_team, splayer_team, fplayer_deck,
                  splayer_deck):
         self.screen = screen
