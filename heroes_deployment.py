@@ -136,7 +136,7 @@ class HeroesDeployment:
         else:
             self.render_text_name = self.font_name.render(self.fplayer_name, 1, constants.Colors.WHITE)
         self.render_text_name_rect = self.render_text_name.get_rect()
-        self.render_text_name_rect.right = self.deck_image_rect.left - 20
+        self.render_text_name_rect.right = self.deck_image_rect.left - constants.HeroesDeployment.PLAYER_NAME_MARGIN
         self.render_text_name_rect.bottom = self.deck_image_rect.bottom
         self.run()
 
@@ -286,11 +286,11 @@ class HeroesDeployment:
         """
         if not self.is_fplayer_deployed:
             self.__init__(self.screen, self.clock, self.fplayer_name, self.splayer_name, self.fplayer_team,
-                          self.splayer_team, self.fplayer_deck, self.splayer_deck, True)
+                          self.splayer_team, self.deck, self.splayer_deck, True)
         else:
             muti_local_battle.MultiLocalBattle(self.screen, self.clock, self.fplayer_name, self.splayer_name,
                                                self.fplayer_team, self.splayer_team, self.fplayer_deck,
-                                               self.splayer_deck)
+                                               self.deck)
 
     def update_battlefield(self, mouse_pos):
         """

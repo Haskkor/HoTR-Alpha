@@ -7,6 +7,7 @@ import initiative_bar_class
 import square_battlefield_class
 import timer_class
 from button_text_class import ButtonText
+from cards_class import Cards
 from heroes_class import Heroes
 
 __author__ = "Jérémy Farnault"
@@ -34,6 +35,8 @@ class MultiLocalBattle:
         self.splayer_deck = splayer_deck
         # Le premier jour commence
         self.current_player = fplayer_name
+        # Pas de carte tirée
+        self.card_drawn = False
         self.background = pygame.image.load(constants.ImagesPath.BATTLEFIELD_DARK).convert()
         # Initialisation des polices
         self.font_back = pygame.font.SysFont(constants.Fonts.ARIAL, 16)
@@ -43,6 +46,8 @@ class MultiLocalBattle:
         self.font_small_bold.set_bold(True)
         self.font_medium = pygame.font.SysFont(constants.Fonts.ARIAL, 18)
         self.font_medium.set_bold(True)
+        self.font_name = pygame.font.SysFont(constants.Fonts.ARIAL, 22)
+        self.font_name.set_bold(True)
         self.font_large = pygame.font.SysFont(constants.Fonts.ARIAL, 28)
         self.font_large.set_bold(True)
         # Création du champ de bataille
@@ -94,6 +99,11 @@ class MultiLocalBattle:
         self.splayer_deck_visualization = deck_visualization_class.DeckVisualization(self.splayer_deck, False)
         # Héros sélectionné
         self.selected_hero = None
+        # Affiche le nom du joueur courant
+        self.render_text_name = self.font_name.render(self.current_player, 1, constants.Colors.WHITE)
+        self.render_text_name_rect = self.render_text_name.get_rect()
+        self.render_text_name_rect.right = self.deck_image_rect.left - constants.LocalTwoBattle.PLAYER_NAME_MARGIN
+        self.render_text_name_rect.bottom = self.deck_image_rect.bottom
         self.run()
 
     def get_event(self, events, mouse_pos):
@@ -109,10 +119,16 @@ class MultiLocalBattle:
                         if isinstance(temp_return_init, Heroes):
                             remove_selected_hero = False
                             self.selected_hero = temp_return_init
+                        # Clic sur le bouton de fin de tour
                         elif isinstance(temp_return_init, bool):
                             remove_selected_hero = False
                             self.current_hero = self.init_bar.heroes_sorted[0]
                             self.current_player = self.init_bar.heroes_sorted[0].player_name
+                            self.render_text_name = self.font_name.render(self.current_player, 1,
+                                                                          constants.Colors.WHITE)
+                            self.card_drawn = False
+                            self.fplayer_deck_visualization.card_drawn = False
+                            self.splayer_deck_visualization.card_drawn = False
                         # Traite les évènements si la visualisation du deck n'est pas ouverte
                         if self.deck_image_rect.collidepoint(mouse_pos):
                             remove_selected_hero = False
@@ -127,6 +143,7 @@ class MultiLocalBattle:
                                 self.fplayer_deck_visualization.draw_new_card()
                             else:
                                 self.splayer_deck_visualization.draw_new_card()
+                            self.card_drawn = True
                     # Traite les évènements de la visualisation du deck
                     else:
                         if self.current_player == self.fplayer_name:
@@ -136,6 +153,11 @@ class MultiLocalBattle:
                         if temp_selected_card is not None:
                             remove_selected_hero = False
                             self.deck_open = False
+                            if (self.current_player == self.fplayer_name and
+                                    self.fplayer_deck_visualization.card_drawn) or \
+                                    (self.current_player == self.fplayer_name and
+                                     self.fplayer_deck_visualization.card_drawn):
+                                self.card_drawn = True
                     # Clic sur un héro ou sur une case vide
                     for i in range(constants.HeroesDeployment.LINES_BF):
                         for j in range(constants.HeroesDeployment.COLUMNS_BF):
@@ -162,6 +184,8 @@ class MultiLocalBattle:
         self.screen.blit(self.timer.render, self.timer.rect)
         # Affiche les éléments si le deck est fermé
         if not self.deck_open:
+            # Affiche le nom du joueur courant
+            self.screen.blit(self.render_text_name, self.render_text_name_rect)
             # Affiche le texte du nombre de points des deux camps
             self.screen.blit(self.points_team_render, self.points_team_rect)
             self.screen.blit(self.points_opp_team_render, self.points_opp_team_rect)
@@ -250,13 +274,12 @@ class MultiLocalBattle:
         """
         Met à jour l'état du bouton pour tirer une carte
         """
-
-        if self.current_player == self.fplayer_name:
-            if len(self.fplayer_deck_visualization.deck) < 1:
-                self.button_draw.active = False
+        if self.card_drawn or \
+                (self.current_player == self.fplayer_name and len(self.fplayer_deck_visualization.deck) < 1) or \
+                (self.current_player == self.splayer_name and len(self.splayer_deck_visualization.deck) < 1):
+            self.button_draw.active = False
         else:
-            if len(self.splayer_deck_visualization.deck) < 1:
-                self.button_draw.active = False
+            self.button_draw.active = True
 
     def run(self):
         done = False
@@ -266,4 +289,5 @@ class MultiLocalBattle:
             self.get_event(pygame.event.get(), mouse_pos)
             self.update_battlefield(mouse_pos)
             self.update_button_draw()
+            self.update_teams_points()
             self.draw(mouse_pos)

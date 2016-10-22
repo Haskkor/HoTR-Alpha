@@ -31,6 +31,7 @@ class DeckVisualization:
             self.list_buttons_right = []
             for i in range(3):
                 self.draw_new_card()
+            self.card_drawn = False
         else:
             self.hand = self.deck
 
@@ -77,6 +78,7 @@ class DeckVisualization:
         self.hand.append(card)
         self.deck.remove(card)
         self.calculate_hand_size()
+        self.card_drawn = True
 
     def sort_by_cost(self):
         """
@@ -95,8 +97,10 @@ class DeckVisualization:
         Change l'état du bouton pour tirer une carte
         """
         for button in self.list_buttons_right:
-            if len(self.deck) < 1 and button.text == constants.Texts.DRAW:
+            if button.text == constants.Texts.DRAW and (len(self.deck) < 1 or self.card_drawn):
                 button.active = False
+            elif button.text == constants.Texts.DRAW:
+                button.active = True
 
     def get_event(self, event, mouse_pos):
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
@@ -114,7 +118,6 @@ class DeckVisualization:
                     if button.rect.collidepoint(mouse_pos):
                         if button.text == constants.Texts.DRAW and button.active:
                             self.draw_new_card()
-                            self.change_state_buttons()
                         elif button.text == constants.Texts.SORT_BY_COST:
                             self.sort_by_cost()
                         elif button.text == constants.Texts.SORT_BY_NAME:
@@ -123,6 +126,9 @@ class DeckVisualization:
     def draw(self, screen, mouse_pos):
         self.surface.fill(constants.Colors.BLACK_FULL_ALPHA)
         self.surface_deck.fill(constants.Colors.BLACK_FULL_ALPHA)
+        # Change l'état des boutons
+        if not self.deployment:
+            self.change_state_buttons()
         # Affiche les cartes
         for i in range(len(self.hand)):
             self.hand[i].miniature_rect.left = (self.hand[0].miniature_rect.width // 2) * i + \

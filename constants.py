@@ -109,6 +109,7 @@ class HeroesDeployment:
     LINES_BF = 12
     MARGIN_POINTS = 50
     MIN_TIMER = 2
+    PLAYER_NAME_MARGIN = 20
     POS_Y_BACK_START = 15
     SEC_TIMER = 0
     SIZE_SQUARE_BF = 49
@@ -195,6 +196,7 @@ class LocalTwoBattle:
     MARGIN_DRAW = 10
     MARGIN_POINTS = 50
     MIN_TIMER = 0
+    PLAYER_NAME_MARGIN = 20
     POS_Y_BACK_START = 15
     SEC_TIMER = 59
     SIZE_SQUARE_BF = 49
