@@ -203,6 +203,11 @@ class LocalTwoBattle:
     TOP_TEXT_POINTS = 605
 
 
+class Main:
+    DELAY = 500
+    INTERVAL = 30
+
+
 class Menu:
     # Menu
     NBR_BUTTONS_MENU = 7

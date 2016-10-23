@@ -2,7 +2,6 @@ import pygame
 import sys
 
 import constants
-import menu_principal
 import name_selection_multi_local
 import team_selection
 from button_text_class import ButtonText

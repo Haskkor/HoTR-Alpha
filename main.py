@@ -14,7 +14,7 @@ def main():
     """
 
     pygame.init()
-    pygame.key.set_repeat(500, 30)
+    pygame.key.set_repeat(constants.Main.DELAY, constants.Main.INTERVAL)
     pygame.font.init()
 
     # Initialisation de l'écran

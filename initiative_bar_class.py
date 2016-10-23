@@ -107,12 +107,18 @@ class InitiativeBar:
                 self.heroes_sorted[i].name_text.get_height() * (i - constants.InitiativeBar.MAX_HERO_LEN)
             self.surface.blit(self.heroes_sorted[i].name_text, self.heroes_sorted[i].name_text_rect)
 
+    def end_turn(self):
+        """
+        Met fin au tour en cours
+        """
+        self.heroes_sorted.append(self.heroes_sorted[0])
+        del self.heroes_sorted[0]
+        self.first_up = not self.first_up
+
     def get_event(self, event, mouse_pos):
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             if self.fake_rect_but_end.collidepoint(mouse_pos[0], mouse_pos[1]):
-                self.heroes_sorted.append(self.heroes_sorted[0])
-                del self.heroes_sorted[0]
-                self.first_up = not self.first_up
+                self.end_turn()
                 return True
             else:
                 end = min(10, len(self.heroes_sorted))

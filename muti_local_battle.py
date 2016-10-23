@@ -65,7 +65,7 @@ class MultiLocalBattle:
                                        timer_sec=constants.LocalTwoBattle.SEC_TIMER, font=self.font_medium,
                                        pos_centerx=self.screen.get_rect().centerx,
                                        pos_top=constants.LocalTwoBattle.TOP_TEXT_POINTS, color=constants.Colors.WHITE,
-                                       color_end=constants.Colors.RED, to_do=print, parameters="GOGOGO")
+                                       color_end=constants.Colors.RED, to_do=self.end_turn, parameters=True)
         # Nombre de points des deux équipes
         self.points_team_render = None
         self.points_opp_team_render = None
@@ -122,13 +122,7 @@ class MultiLocalBattle:
                         # Clic sur le bouton de fin de tour
                         elif isinstance(temp_return_init, bool):
                             remove_selected_hero = False
-                            self.current_hero = self.init_bar.heroes_sorted[0]
-                            self.current_player = self.init_bar.heroes_sorted[0].player_name
-                            self.render_text_name = self.font_name.render(self.current_player, 1,
-                                                                          constants.Colors.WHITE)
-                            self.card_drawn = False
-                            self.fplayer_deck_visualization.card_drawn = False
-                            self.splayer_deck_visualization.card_drawn = False
+                            self.end_turn(False)
                         # Traite les évènements si la visualisation du deck n'est pas ouverte
                         if self.deck_image_rect.collidepoint(mouse_pos):
                             remove_selected_hero = False
@@ -280,6 +274,24 @@ class MultiLocalBattle:
             self.button_draw.active = False
         else:
             self.button_draw.active = True
+
+    def end_turn(self, from_timer):
+        """
+        Met fin au tour en cours
+        """
+        if from_timer:
+            self.init_bar.end_turn()
+        self.current_hero = self.init_bar.heroes_sorted[0]
+        self.current_player = self.init_bar.heroes_sorted[0].player_name
+        self.render_text_name = self.font_name.render(self.current_player, 1, constants.Colors.WHITE)
+        self.card_drawn = False
+        self.fplayer_deck_visualization.card_drawn = False
+        self.splayer_deck_visualization.card_drawn = False
+        self.timer = timer_class.Timer(timer_min=constants.LocalTwoBattle.MIN_TIMER,
+                                       timer_sec=constants.LocalTwoBattle.SEC_TIMER, font=self.font_medium,
+                                       pos_centerx=self.screen.get_rect().centerx,
+                                       pos_top=constants.LocalTwoBattle.TOP_TEXT_POINTS, color=constants.Colors.WHITE,
+                                       color_end=constants.Colors.RED, to_do=self.end_turn, parameters=True)
 
     def run(self):
         done = False

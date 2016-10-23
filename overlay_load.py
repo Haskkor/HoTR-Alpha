@@ -235,6 +235,7 @@ class OverlayLoad:
                     button.active = True
                 elif self.start_list_saves == 0:
                     button.active = False
+
     def run(self):
         done = False
         while not done:
