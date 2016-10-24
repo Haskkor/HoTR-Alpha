@@ -251,6 +251,8 @@ class MultiLocalBattle:
                         self.battlefield[i][j].render_hero_hovered()
                     else:
                         self.battlefield[i][j].render_foe_hovered()
+                elif self.battlefield[i][j].hero == self.current_hero:
+                    self.battlefield[i][j].render_current()
                 elif self.battlefield[i][j].hero is not None:
                     if self.battlefield[i][j].hero.player_name == self.current_player:
                         self.battlefield[i][j].render_hero()

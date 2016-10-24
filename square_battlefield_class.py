@@ -21,6 +21,20 @@ class SquareBattlefield:
         self.hero = None
         self.update_rect()
 
+    def render_current(self):
+        """
+        Héro courant : carré bleu électrique vide, bords solides, 44*44
+        """
+        self.pos_x = self.orig_pos_x + constants.SquareBattlefield.SQUARE // 2 - constants.SquareBattlefield.HEROES // 2
+        self.pos_y = self.orig_pos_y + constants.SquareBattlefield.SQUARE // 2 - constants.SquareBattlefield.HEROES // 2
+        self.render = pygame.Surface((constants.SquareBattlefield.HEROES, constants.SquareBattlefield.HEROES),
+                                     pygame.SRCALPHA)
+        self.render.fill(constants.Colors.BLACK_FULL_ALPHA)
+        pygame.draw.rect(self.render, constants.Colors.ELECTRIC_BLUE, (0, 0, constants.SquareBattlefield.HEROES - 1,
+                                                                       constants.SquareBattlefield.HEROES - 1),
+                         constants.SquareBattlefield.THICK_SMALL)
+        self.update_rect()
+
     def render_hero(self):
         """
         Héro inactif : carré gris vide, bords solides, 44*44
