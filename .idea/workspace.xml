@@ -2,16 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e867340f-28b8-4586-8fe9-24cb3c9a7b91" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/action_points_zone.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cards" afterPath="$PROJECT_DIR$/cards" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/heroes" afterPath="$PROJECT_DIR$/heroes" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/HoTR Alpha.iml" afterPath="$PROJECT_DIR$/.idea/HoTR Alpha.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/constants.py" afterPath="$PROJECT_DIR$/constants.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/heroes_deployment.py" afterPath="$PROJECT_DIR$/heroes_deployment.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/muti_local_battle.py" afterPath="$PROJECT_DIR$/muti_local_battle.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/square_battlefield_class.py" afterPath="$PROJECT_DIR$/square_battlefield_class.py" />
     </list>
     <ignored path="HoTR Alpha.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -571,7 +562,14 @@
       <option name="project" value="LOCAL" />
       <updated>1477332892932</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Working on the action points on the multi local battle screen">
+      <created>1482776768130</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1482776768130</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -581,7 +579,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="54" y="-8" width="1554" height="916" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1449935" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -622,7 +620,8 @@
     <MESSAGE value="Fixing card drawing in multi local battle. Adding name in this screen." />
     <MESSAGE value="Making timer operational." />
     <MESSAGE value="Adding a visual for the current hero." />
-    <option name="LAST_COMMIT_MESSAGE" value="Adding a visual for the current hero." />
+    <MESSAGE value="Working on the action points on the multi local battle screen" />
+    <option name="LAST_COMMIT_MESSAGE" value="Working on the action points on the multi local battle screen" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
