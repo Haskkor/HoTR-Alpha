@@ -19,6 +19,7 @@ class SquareBattlefield:
                                       constants.SquareBattlefield.LITTLE_SQUARE), pygame.SRCALPHA)
         self.rect = None
         self.hero = None
+        self.state = None
         self.update_rect()
 
     def render_current(self):
@@ -33,6 +34,7 @@ class SquareBattlefield:
         pygame.draw.rect(self.render, constants.Colors.ELECTRIC_BLUE, (0, 0, constants.SquareBattlefield.HEROES - 1,
                                                                        constants.SquareBattlefield.HEROES - 1),
                          constants.SquareBattlefield.THICK_SMALL)
+        self.state = "CURRENT"
         self.update_rect()
 
     def render_hero(self):
@@ -47,6 +49,7 @@ class SquareBattlefield:
         pygame.draw.rect(self.render, constants.Colors.DARK_SLATE_GRAY, (0, 0, constants.SquareBattlefield.HEROES - 1,
                                                                          constants.SquareBattlefield.HEROES - 1),
                          constants.SquareBattlefield.THICK_SMALL)
+        self.state = "HERO"
         self.update_rect()
 
     def render_hero_selected(self):
@@ -64,6 +67,7 @@ class SquareBattlefield:
         pygame.draw.circle(self.render, constants.Colors.GOLD, (constants.SquareBattlefield.SQUARE // 2,
                                                                 constants.SquareBattlefield.SQUARE // 2),
                            constants.SquareBattlefield.CIRCLE_HEROES, constants.SquareBattlefield.THICK_SMALL)
+        self.state = "HERO_SELECTED"
         self.update_rect()
 
     def render_hero_hovered(self):
@@ -79,11 +83,12 @@ class SquareBattlefield:
         pygame.draw.circle(self.render, constants.Colors.GOLD, (constants.SquareBattlefield.SQUARE // 2,
                                                                 constants.SquareBattlefield.SQUARE // 2),
                            constants.SquareBattlefield.CIRCLE_HEROES, constants.SquareBattlefield.THICK_SMALL)
+        self.state = "HERO_HOVERED"
         self.update_rect()
 
     def render_available(self):
         """
-        Case disponible, carré jaune légèrement transparent, bords solides, 50*50
+        Case disponible, carré bleu électrique légèrement transparent, bords solides, 50*50
         """
         self.pos_x = self.orig_pos_x
         self.pos_y = self.orig_pos_y
@@ -93,6 +98,22 @@ class SquareBattlefield:
         pygame.draw.rect(self.render, constants.Colors.ELECTRIC_BLUE, (0, 0, constants.SquareBattlefield.SQUARE - 1,
                                                                        constants.SquareBattlefield.SQUARE - 1),
                          constants.SquareBattlefield.THICK_SMALL)
+        self.state = "AVAILABLE"
+        self.update_rect()
+
+    def render_available_hovered(self):
+        """
+        Case disponible survolé, carré bleu royal légèrement transparent, bords solides, 50*50
+        """
+        self.pos_x = self.orig_pos_x
+        self.pos_y = self.orig_pos_y
+        self.render = pygame.Surface((constants.SquareBattlefield.SQUARE, constants.SquareBattlefield.SQUARE),
+                                     pygame.SRCALPHA)
+        self.render.fill(constants.Colors.ROYAL_BLUE_150_ALPHA)
+        pygame.draw.rect(self.render, constants.Colors.ELECTRIC_BLUE, (0, 0, constants.SquareBattlefield.SQUARE - 1,
+                                                                       constants.SquareBattlefield.SQUARE - 1),
+                         constants.SquareBattlefield.THICK_SMALL)
+        self.state = "AVAILABLE_HOVERED"
         self.update_rect()
 
     def render_hero_attack(self):
@@ -109,6 +130,7 @@ class SquareBattlefield:
         pygame.draw.rect(self.render, constants.Colors.ORANGE_RED, (0, 0, constants.SquareBattlefield.LITTLE_SQUARE - 1,
                                                                     constants.SquareBattlefield.LITTLE_SQUARE - 1),
                          constants.SquareBattlefield.THICK_BIG)
+        self.state = "HERO_ATTACK"
         self.update_rect()
 
     def render_hero_magic(self):
@@ -125,6 +147,7 @@ class SquareBattlefield:
         pygame.draw.rect(self.render, constants.Colors.PURPLE, (0, 0, constants.SquareBattlefield.LITTLE_SQUARE - 1,
                                                                 constants.SquareBattlefield.LITTLE_SQUARE - 1),
                          constants.SquareBattlefield.THICK_BIG)
+        self.state = "HERO_MAGIC"
         self.update_rect()
 
     def render_foe(self):
@@ -139,6 +162,7 @@ class SquareBattlefield:
         pygame.draw.rect(self.render, constants.Colors.DARK_RED, (0, 0, constants.SquareBattlefield.HEROES - 1,
                                                                   constants.SquareBattlefield.HEROES - 1),
                          constants.SquareBattlefield.THICK_SMALL)
+        self.state = "FOE"
         self.update_rect()
 
     def render_foe_hovered(self):
@@ -154,6 +178,7 @@ class SquareBattlefield:
         pygame.draw.circle(self.render, constants.Colors.RED, (constants.SquareBattlefield.SQUARE // 2,
                                                                constants.SquareBattlefield.SQUARE // 2),
                            constants.SquareBattlefield.CIRCLE_HEROES, constants.SquareBattlefield.THICK_SMALL)
+        self.state = "FOE_HOVERED"
         self.update_rect()
 
     def render_foe_selected(self):
@@ -171,6 +196,7 @@ class SquareBattlefield:
         pygame.draw.circle(self.render, constants.Colors.RED, (constants.SquareBattlefield.SQUARE // 2,
                                                                constants.SquareBattlefield.SQUARE // 2),
                            constants.SquareBattlefield.CIRCLE_HEROES, constants.SquareBattlefield.THICK_SMALL)
+        self.state = "FOE_SELECTED"
         self.update_rect()
 
     def render_none(self):
@@ -184,6 +210,7 @@ class SquareBattlefield:
         self.render = pygame.Surface((constants.SquareBattlefield.LITTLE_SQUARE,
                                       constants.SquareBattlefield.LITTLE_SQUARE), pygame.SRCALPHA)
         self.render.fill(constants.Colors.DARK_SLATE_GRAY_100_ALPHA)
+        self.state = None
         self.update_rect()
 
     def update_rect(self):

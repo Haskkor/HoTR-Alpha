@@ -3,6 +3,32 @@ import string
 __author__ = "Jérémy Farnault"
 
 
+class ActionPointsZone:
+    # Zone des points d'action
+    HEIGHT = 120
+    WIDTH = 40
+
+
+class Battle:
+    # Bataille à deux joueurs en local
+    ACTION_POINTS = 3
+    ACTION_POINTS_MARGIN = 5
+    COLUMNS_BF = 16
+    DECK_IMAGE_RECT_MARGIN = 2
+    DECK_IMAGE_RECT_MARGIN_RIGHT = 10
+    DECK_IMAGE_RECT_MARGIN_BOT = 10
+    DECK_TXT_MARGIN = 30
+    LINES_BF = 12
+    MARGIN_DRAW = 10
+    MARGIN_POINTS = 50
+    MIN_TIMER = 0
+    PLAYER_NAME_MARGIN = 20
+    POS_Y_BACK_START = 15
+    SEC_TIMER = 59
+    SIZE_SQUARE_BF = 49
+    TOP_TEXT_POINTS = 605
+
+
 class Card:
     # Cartes
     COST_SURFACE_LIST_MARGIN = 10
@@ -34,6 +60,8 @@ class Colors:
     PURPLE = (127, 0, 255, 255)
     RED = (255, 0, 0, 255)
     RED_150_ALPHA = (255, 0, 0, 150)
+    ROYAL_BLUE = (19, 66, 148, 255)
+    ROYAL_BLUE_150_ALPHA = (19, 66, 148, 150)
     SADDLE_BROW = (139, 69, 19, 255)
     SQUARE_BATTLEFIELD_ALPHA = 150
     WHITE = (255, 255, 255, 255)
@@ -124,6 +152,9 @@ class HeroDetailsZone:
 
 class ImagesPath:
     # Images paths
+    ACTION_POINT_MOUSE_PATH = r"assets\various\action_point_mouse_path.png"
+    ACTION_POINT_UNUSED = r"assets\various\action_point_unused.png"
+    ACTION_POINT_USED = r"assets\various\action_point_used.png"
     BACK_NAME_SELECT = r"assets\backgrounds\name_selection.png"
     B_S_S_SCREEN = r"assets\backgrounds\battle_size_selection.png"
     BACK_START_DEPLOYMENT = r"assets\various\back_start_deployment.png"
@@ -183,24 +214,6 @@ class InitiativeBar:
 class Intro:
     # Intro
     POS_TEXT_Y = 300
-
-
-class LocalTwoBattle:
-    # Bataille à deux joueurs en local
-    COLUMNS_BF = 16
-    DECK_IMAGE_RECT_MARGIN = 2
-    DECK_IMAGE_RECT_MARGIN_RIGHT = 10
-    DECK_IMAGE_RECT_MARGIN_BOT = 10
-    DECK_TXT_MARGIN = 30
-    LINES_BF = 12
-    MARGIN_DRAW = 10
-    MARGIN_POINTS = 50
-    MIN_TIMER = 0
-    PLAYER_NAME_MARGIN = 20
-    POS_Y_BACK_START = 15
-    SEC_TIMER = 59
-    SIZE_SQUARE_BF = 49
-    TOP_TEXT_POINTS = 605
 
 
 class Main:

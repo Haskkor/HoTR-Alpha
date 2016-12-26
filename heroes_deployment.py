@@ -318,6 +318,8 @@ class HeroesDeployment:
                         self.battlefield[i][j].render_hero()
                     else:
                         self.battlefield[i][j].render_foe()
+                elif self.battlefield[i][j].rect.collidepoint(mouse_pos):
+                    self.battlefield[i][j].render_available_hovered()
                 else:
                     self.battlefield[i][j].render_available()
 
