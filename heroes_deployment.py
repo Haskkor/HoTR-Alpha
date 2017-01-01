@@ -91,7 +91,8 @@ class HeroesDeployment:
         self.list_buttons_text = list()
         self.list_buttons_text.append(ButtonText(font=self.font_large, pos_centerx=self.screen.get_rect().centerx,
                                                  pos_centery=constants.HeroesDeployment.POS_Y_BACK_START +
-                                                 self.back_text_rect.height // 2, on_clic=self.launch_next_page,
+                                                 self.back_text_rect.height // 2,
+                                                 on_clic=self.launch_next_page,
                                                  text=constants.Texts.START, active=True))
         # Timer
         self.timer = timer_class.Timer(timer_min=constants.HeroesDeployment.MIN_TIMER,
@@ -175,8 +176,9 @@ class HeroesDeployment:
                                 remove_selected_hero = False
                                 if self.battlefield[i][j].hero is not None:
                                     self.selected_hero = self.battlefield[i][j].hero
-                                elif (not self.is_fplayer_deployed and j <= constants.HeroesDeployment.LIMIT_FPLAYER) \
-                                        or (self.is_fplayer_deployed and j >= constants.HeroesDeployment.LIMIT_SPLAYER):
+                                elif self.selected_hero is not None and (
+                                    not self.is_fplayer_deployed and j <= constants.HeroesDeployment.LIMIT_FPLAYER) or (
+                                        self.is_fplayer_deployed and j >= constants.HeroesDeployment.LIMIT_SPLAYER):
                                     self.battlefield[i][j].hero = self.selected_hero
                                     self.battlefield[self.selected_hero.pos_bf_i][self.selected_hero.pos_bf_j].hero = \
                                         None

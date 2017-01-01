@@ -263,6 +263,7 @@ class SquareBattlefield:
     HEROES = 44
     HEROES_MARGIN_BOT = 15
     LITTLE_SQUARE = 25
+    MOVEMENT_ACTION_POINTS_PADDING = 10
     SQUARE = 50
     START_X = 112
     START_Y = 15

@@ -1,4 +1,5 @@
 import sys
+import copy
 
 import pygame
 
@@ -104,16 +105,13 @@ class MultiLocalBattle:
         self.splayer_deck_visualization = deck_visualization_class.DeckVisualization(self.splayer_deck, False)
         # Héros sélectionné
         self.selected_hero = None
+        # Case sélectionnée pour le mouvement
+        self.selected_movement_tile = None
         # Affiche le nom du joueur courant
         self.render_text_name = self.font_name.render(self.current_player, 1, constants.Colors.WHITE)
         self.render_text_name_rect = self.render_text_name.get_rect()
         self.render_text_name_rect.right = self.deck_image_rect.left - constants.Battle.PLAYER_NAME_MARGIN
         self.render_text_name_rect.bottom = self.deck_image_rect.bottom
-        # Images représentant en prévision les points d'action dépensés pour le mouvement
-        self.ap_mp_1_rect = pygame.image.load(constants.ImagesPath.ACTION_POINT_MOUSE_PATH)
-        self.ap_mp_1_rect = self.ap_mp_1_rect.get_rect()
-        self.ap_mp_2_rect = pygame.image.load(constants.ImagesPath.ACTION_POINT_MOUSE_PATH)
-        self.ap_mp_2_rect = self.ap_mp_1_rect.get_rect()
         self.run()
 
     def get_event(self, events, mouse_pos):
@@ -133,7 +131,7 @@ class MultiLocalBattle:
                         elif isinstance(temp_return_init, bool):
                             remove_selected_hero = False
                             self.end_turn(False)
-                        # Traite les évènements si la visualisation du deck n'est pas ouverte
+                        # Ouvre le deck au clic sur l'image
                         if self.deck_image_rect.collidepoint(mouse_pos):
                             remove_selected_hero = False
                             self.deck_open = True
@@ -147,7 +145,7 @@ class MultiLocalBattle:
                                 self.fplayer_deck_visualization.draw_new_card()
                             else:
                                 self.splayer_deck_visualization.draw_new_card()
-                            self.current_player_action_points = 0
+                            self.current_player_action_points -= constants.Battle.ACTION_POINTS
                             self.card_drawn = True
                     # Traite les évènements de la visualisation du deck
                     else:
@@ -163,14 +161,17 @@ class MultiLocalBattle:
                                     (self.current_player == self.fplayer_name and
                                          self.fplayer_deck_visualization.card_drawn):
                                 self.card_drawn = True
-                    # Clic sur un héro ou sur une case vide
+                    # Clic sur un élément du champ de bataille
                     for i in range(constants.HeroesDeployment.LINES_BF):
                         for j in range(constants.HeroesDeployment.COLUMNS_BF):
-                            if self.battlefield[i][j].rect.collidepoint(mouse_pos) and self.battlefield[i][
-                                j].state is not None:
+                            if self.battlefield[i][j].rect.collidepoint(mouse_pos) and self.battlefield[i][j].state is not None:
                                 remove_selected_hero = False
+                                # Clic sur un héro
                                 if self.battlefield[i][j].hero is not None:
                                     self.selected_hero = self.battlefield[i][j].hero
+                                # Clic sur une case disponible pour le mouvement
+                                elif self.battlefield[i][j].state == "AVAILABLE_HOVERED" or self.battlefield[i][j].state == "AVAILABLE":
+                                    self.selected_movement_tile = copy.copy(self.battlefield[i][j])
                                 break
                     if remove_selected_hero:
                         self.selected_hero = None
@@ -223,14 +224,6 @@ class MultiLocalBattle:
                 self.screen.blit(self.button_draw.render_base, self.button_draw.rect)
             else:
                 self.screen.blit(self.button_draw.render_inactive, self.button_draw.rect)
-
-
-            # Affiche les images représentant en prévision les points d'action dépensés pour le mouvement
-
-
-
-
-
         # Affiche la visualisation des cartes du deck
         else:
             if self.current_player == self.fplayer_name:
@@ -285,21 +278,28 @@ class MultiLocalBattle:
                 elif self.selected_hero == self.current_hero \
                         and ((self.current_player_action_points > 1
                              and constants.Battle.LINES_BF > i >= 0
-                             and self.current_hero.pos_bf_i + self.current_hero.speed > i > self.current_hero.pos_bf_i - self.current_hero.speed
+                             and self.current_hero.pos_bf_i + (self.current_hero.speed + 1) > i > self.current_hero.pos_bf_i - (self.current_hero.speed + 1)
                              and constants.Battle.COLUMNS_BF > j >= 0
-                             and self.current_hero.pos_bf_j + self.current_hero.speed > j > self.current_hero.pos_bf_j - self.current_hero.speed)
+                             and self.current_hero.pos_bf_j + (self.current_hero.speed + 1) > j > self.current_hero.pos_bf_j - (self.current_hero.speed + 1))
                         or (self.current_player_action_points > 0
                             and constants.Battle.LINES_BF > i >= 0
-                            and self.current_hero.pos_bf_i + self.current_hero.speed // 2 > i > self.current_hero.pos_bf_i - self.current_hero.speed // 2
+                            and self.current_hero.pos_bf_i + (self.current_hero.speed + 1) // 2 > i > self.current_hero.pos_bf_i - (self.current_hero.speed + 1) // 2
                             and constants.Battle.COLUMNS_BF > j >= 0
-                            and self.current_hero.pos_bf_j + self.current_hero.speed // 2 > j > self.current_hero.pos_bf_j - self.current_hero.speed // 2)):
+                            and self.current_hero.pos_bf_j + (self.current_hero.speed + 1) // 2 > j > self.current_hero.pos_bf_j - (self.current_hero.speed + 1) // 2)):
                     temps_rect = pygame.Rect(self.battlefield[i][j].rect.left + 1, self.battlefield[i][j].rect.top + 1,
                                              self.battlefield[i][j].rect.width - 1,
                                              self.battlefield[i][j].rect.height - 1)
-                    if temps_rect.collidepoint(mouse_pos):
-                        self.battlefield[i][j].render_available_hovered()
+                    if self.selected_movement_tile is None:
+                        if temps_rect.collidepoint(mouse_pos):
+                            self.battlefield[i][j].render_available_hovered(True, self.current_hero.pos_bf_i + (self.current_hero.speed + 1) // 2 > i > self.current_hero.pos_bf_i - (self.current_hero.speed + 1) // 2, self.current_hero.pos_bf_j + (self.current_hero.speed + 1) // 2 > j > self.current_hero.pos_bf_j - (self.current_hero.speed + 1) // 2)
+                        else:
+                            self.battlefield[i][j].render_available()
+                    # Si une case a été sélectionnée pour le mouvement
                     else:
-                        self.battlefield[i][j].render_available()
+                        if self.battlefield[i][j].pos_x == self.selected_movement_tile.pos_x and self.battlefield[i][j].pos_y == self.selected_movement_tile.pos_y:
+                            self.battlefield[i][j].render_available_hovered(True, True, self.selected_movement_tile.movement_cost < 2)
+                        else:
+                            self.battlefield[i][j].render_none()
                 else:
                     self.battlefield[i][j].render_none()
 
@@ -307,8 +307,8 @@ class MultiLocalBattle:
         """
         Met à jour l'état du bouton pour tirer une carte
         """
-        if self.card_drawn or \
-                (self.current_player == self.fplayer_name and len(self.fplayer_deck_visualization.deck) < 1) or \
+        if self.card_drawn or self.current_player_action_points < constants.Battle.ACTION_POINTS \
+                or (self.current_player == self.fplayer_name and len(self.fplayer_deck_visualization.deck) < 1) or \
                 (self.current_player == self.splayer_name and len(self.splayer_deck_visualization.deck) < 1):
             self.button_draw.active = False
         else:

@@ -20,6 +20,11 @@ class SquareBattlefield:
         self.rect = None
         self.hero = None
         self.state = None
+        self.ap_movement_1 = pygame.image.load(constants.ImagesPath.ACTION_POINT_MOUSE_PATH)
+        self.ap_movement_1_rect = self.ap_movement_1.get_rect()
+        self.ap_movement_2 = pygame.image.load(constants.ImagesPath.ACTION_POINT_MOUSE_PATH)
+        self.ap_movement_2_rect = self.ap_movement_2.get_rect()
+        self.movement_cost = 0
         self.update_rect()
 
     def render_current(self):
@@ -101,7 +106,7 @@ class SquareBattlefield:
         self.state = "AVAILABLE"
         self.update_rect()
 
-    def render_available_hovered(self):
+    def render_available_hovered(self, in_battle=False, semi_movement_x=False, semi_movement_y=False):
         """
         Case disponible survolé, carré bleu royal légèrement transparent, bords solides, 50*50
         """
@@ -113,6 +118,24 @@ class SquareBattlefield:
         pygame.draw.rect(self.render, constants.Colors.ELECTRIC_BLUE, (0, 0, constants.SquareBattlefield.SQUARE - 1,
                                                                        constants.SquareBattlefield.SQUARE - 1),
                          constants.SquareBattlefield.THICK_SMALL)
+        # Affiche les points d'action nécessaires pour effectuer le mouvement
+        self.movement_cost = 0
+        if in_battle:
+            if semi_movement_x and semi_movement_y:
+                self.ap_movement_1_rect.centerx = self.render.get_rect().centerx
+                self.ap_movement_1_rect.centery = self.render.get_rect().centery
+                self.render.blit(self.ap_movement_1, self.ap_movement_1_rect)
+                self.movement_cost = 1
+            else:
+                self.ap_movement_1_rect.centerx = \
+                    self.render.get_rect().centerx - constants.SquareBattlefield.MOVEMENT_ACTION_POINTS_PADDING
+                self.ap_movement_1_rect.centery = self.render.get_rect().centery
+                self.render.blit(self.ap_movement_1, self.ap_movement_1_rect)
+                self.ap_movement_2_rect.centerx = \
+                    self.render.get_rect().centerx + constants.SquareBattlefield.MOVEMENT_ACTION_POINTS_PADDING
+                self.ap_movement_2_rect.centery = self.render.get_rect().centery
+                self.render.blit(self.ap_movement_2, self.ap_movement_2_rect)
+                self.movement_cost = 2
         self.state = "AVAILABLE_HOVERED"
         self.update_rect()
 
