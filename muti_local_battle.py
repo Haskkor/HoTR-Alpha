@@ -1,5 +1,5 @@
-import sys
 import copy
+import sys
 
 import pygame
 
@@ -120,20 +120,37 @@ class MultiLocalBattle:
                 # Clic gauche
                 if event.button == 1:
                     # Permet de désectionner un héro au clic sur une partie non utilisée de l'écran
-                    remove_selected_hero = True
-                    # Si la visualisation du deck n'est pas ouverte, contrôle les events de la barre d'initiative
+                    remove_selected = True
+                    # Si la visualisation du deck n'est pas ouverte
                     if not self.deck_open:
+
+
+                        # Second clic sur une case sélectionnée pour le mouvement
+                        if self.selected_movement_tile is not None and self.selected_movement_tile.rect.collidepoint(mouse_pos):
+                            remove_selected = False
+                            for i in range(constants.HeroesDeployment.LINES_BF):
+                                for j in range(constants.HeroesDeployment.COLUMNS_BF):
+                                    if self.selected_movement_tile is not None and self.selected_movement_tile.pos_x == self.battlefield[i][j].pos_x and self.selected_movement_tile.pos_y == self.battlefield[i][j].pos_y:
+                                        self.selected_movement_tile = None
+                                        self.battlefield[i][j].hero = self.selected_hero
+                                        self.battlefield[self.selected_hero.pos_bf_i][self.selected_hero.pos_bf_j].hero = None
+                                        self.current_player_action_points -= 1
+
+
+
+
+                        # Contrôle les events de la barre d'initiative
                         temp_return_init = self.init_bar.get_event(event, mouse_pos)
                         if isinstance(temp_return_init, Heroes):
-                            remove_selected_hero = False
+                            remove_selected = False
                             self.selected_hero = temp_return_init
                         # Clic sur le bouton de fin de tour
                         elif isinstance(temp_return_init, bool):
-                            remove_selected_hero = False
+                            remove_selected = False
                             self.end_turn(False)
                         # Ouvre le deck au clic sur l'image
                         if self.deck_image_rect.collidepoint(mouse_pos):
-                            remove_selected_hero = False
+                            remove_selected = False
                             self.deck_open = True
                             if self.current_player == self.fplayer_name:
                                 self.fplayer_deck_visualization.calculate_hand_size()
@@ -154,7 +171,7 @@ class MultiLocalBattle:
                         else:
                             temp_selected_card = self.splayer_deck_visualization.get_event(event, mouse_pos)
                         if temp_selected_card is not None:
-                            remove_selected_hero = False
+                            remove_selected = False
                             self.deck_open = False
                             if (self.current_player == self.fplayer_name and
                                     self.fplayer_deck_visualization.card_drawn) or \
@@ -165,7 +182,7 @@ class MultiLocalBattle:
                     for i in range(constants.HeroesDeployment.LINES_BF):
                         for j in range(constants.HeroesDeployment.COLUMNS_BF):
                             if self.battlefield[i][j].rect.collidepoint(mouse_pos) and self.battlefield[i][j].state is not None:
-                                remove_selected_hero = False
+                                remove_selected = False
                                 # Clic sur un héro
                                 if self.battlefield[i][j].hero is not None:
                                     self.selected_hero = self.battlefield[i][j].hero
@@ -173,8 +190,11 @@ class MultiLocalBattle:
                                 elif self.battlefield[i][j].state == "AVAILABLE_HOVERED" or self.battlefield[i][j].state == "AVAILABLE":
                                     self.selected_movement_tile = copy.copy(self.battlefield[i][j])
                                 break
-                    if remove_selected_hero:
+                    # Déselection du héro courant ou de la case choisie pour le mouvement
+                    if remove_selected and self.selected_movement_tile is None:
                         self.selected_hero = None
+                    elif remove_selected:
+                        self.selected_movement_tile = None
             if event.type == pygame.QUIT:
                 leave()
 
