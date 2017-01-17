@@ -1,5 +1,6 @@
-import constants
 import pygame
+
+import constants
 
 __author__ = "Jérémy Farnault"
 
@@ -108,7 +109,8 @@ class SquareBattlefield:
 
     def render_available_hovered(self, in_battle=False, semi_movement_x=False, semi_movement_y=False):
         """
-        Case disponible survolé, carré bleu royal légèrement transparent, bords solides, 50*50
+        Case disponible survolé, carré bleu royal légèrement transparent, bords solides, 50*50, images représentant
+        les points d'action
         """
         self.pos_x = self.orig_pos_x
         self.pos_y = self.orig_pos_y
@@ -121,22 +123,28 @@ class SquareBattlefield:
         # Affiche les points d'action nécessaires pour effectuer le mouvement
         self.movement_cost = 0
         if in_battle:
-            if semi_movement_x and semi_movement_y:
-                self.ap_movement_1_rect.centerx = self.render.get_rect().centerx
-                self.ap_movement_1_rect.centery = self.render.get_rect().centery
-                self.render.blit(self.ap_movement_1, self.ap_movement_1_rect)
-                self.movement_cost = 1
-            else:
-                self.ap_movement_1_rect.centerx = \
-                    self.render.get_rect().centerx - constants.SquareBattlefield.MOVEMENT_ACTION_POINTS_PADDING
-                self.ap_movement_1_rect.centery = self.render.get_rect().centery
-                self.render.blit(self.ap_movement_1, self.ap_movement_1_rect)
-                self.ap_movement_2_rect.centerx = \
-                    self.render.get_rect().centerx + constants.SquareBattlefield.MOVEMENT_ACTION_POINTS_PADDING
-                self.ap_movement_2_rect.centery = self.render.get_rect().centery
-                self.render.blit(self.ap_movement_2, self.ap_movement_2_rect)
-                self.movement_cost = 2
+            self.manage_action_points(semi_movement_x, semi_movement_y)
         self.state = "AVAILABLE_HOVERED"
+        self.update_rect()
+
+    def render_selected_hovered(self, semi_movement_x=False, semi_movement_y=False):
+        """
+        Case sélectionnée pour le mouvement et survolée, rond bleu royal légèrement transparent, bords solides,
+        diamètre 44, images représentant les points d'action
+        """
+        self.pos_x = self.orig_pos_x
+        self.pos_y = self.orig_pos_y
+        self.render = pygame.Surface((constants.SquareBattlefield.SQUARE, constants.SquareBattlefield.SQUARE),
+                                     pygame.SRCALPHA)
+        self.render.fill(constants.Colors.BLACK_FULL_ALPHA)
+        pygame.draw.circle(self.render, constants.Colors.ROYAL_BLUE_150_ALPHA,
+                           (constants.SquareBattlefield.SQUARE // 2, constants.SquareBattlefield.SQUARE // 2),
+                           constants.SquareBattlefield.CIRCLE_HEROES, 0)
+        pygame.draw.circle(self.render, constants.Colors.ELECTRIC_BLUE, (constants.SquareBattlefield.SQUARE // 2,
+                                                                         constants.SquareBattlefield.SQUARE // 2),
+                           constants.SquareBattlefield.CIRCLE_HEROES, constants.SquareBattlefield.THICK_SMALL)
+        self.manage_action_points(semi_movement_x, semi_movement_y)
+        self.state = "SELECTED_HOVERED"
         self.update_rect()
 
     def render_hero_attack(self):
@@ -197,7 +205,6 @@ class SquareBattlefield:
         self.render = pygame.Surface((constants.SquareBattlefield.SQUARE, constants.SquareBattlefield.SQUARE),
                                      pygame.SRCALPHA)
         self.render.fill(constants.Colors.BLACK_FULL_ALPHA)
-
         pygame.draw.circle(self.render, constants.Colors.RED, (constants.SquareBattlefield.SQUARE // 2,
                                                                constants.SquareBattlefield.SQUARE // 2),
                            constants.SquareBattlefield.CIRCLE_HEROES, constants.SquareBattlefield.THICK_SMALL)
@@ -243,3 +250,23 @@ class SquareBattlefield:
         if self.hero is not None:
             self.hero.battlefield_rect.centerx = self.rect.centerx
             self.hero.battlefield_rect.bottom = self.rect.centery + constants.SquareBattlefield.HEROES_MARGIN_BOT
+
+    def manage_action_points(self, semi_movement_x, semi_movement_y):
+        """
+        Affiche et calcule le nombre de points d'action en fonction de la position de la case
+        """
+        if semi_movement_x and semi_movement_y:
+            self.ap_movement_1_rect.centerx = self.render.get_rect().centerx
+            self.ap_movement_1_rect.centery = self.render.get_rect().centery
+            self.render.blit(self.ap_movement_1, self.ap_movement_1_rect)
+            self.movement_cost = 1
+        else:
+            self.ap_movement_1_rect.centerx = \
+                self.render.get_rect().centerx - constants.SquareBattlefield.MOVEMENT_ACTION_POINTS_PADDING
+            self.ap_movement_1_rect.centery = self.render.get_rect().centery
+            self.render.blit(self.ap_movement_1, self.ap_movement_1_rect)
+            self.ap_movement_2_rect.centerx = \
+                self.render.get_rect().centerx + constants.SquareBattlefield.MOVEMENT_ACTION_POINTS_PADDING
+            self.ap_movement_2_rect.centery = self.render.get_rect().centery
+            self.render.blit(self.ap_movement_2, self.ap_movement_2_rect)
+            self.movement_cost = 2

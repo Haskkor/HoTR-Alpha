@@ -9,6 +9,7 @@ import overlay_points_left_team_selection
 import overlay_save
 from button_image_class import ButtonImage
 from button_text_class import ButtonText
+from loading_screen import show_loading_screen
 from heroes_class import Heroes
 from load_class import Load
 
@@ -472,6 +473,7 @@ class TeamSelection:
                                                                                   self.splayer_team)
                 self.fplayer_team = None
             else:
+                show_loading_screen(self.screen)
                 self.__init__((self.screen, self.clock, self.total_points, self.fplayer_name, self.splayer_name,
                                self.fplayer_team, None, list()))
         else:
@@ -487,6 +489,7 @@ class TeamSelection:
                                                                                   self.splayer_team)
                 self.splayer_team = None
             else:
+                show_loading_screen(self.screen)
                 deck_selection.DeckSelection((self.screen, self.clock, self.total_points, self.fplayer_name,
                                               self.splayer_name, self.fplayer_team, self.splayer_team, None, None,
                                               list()))

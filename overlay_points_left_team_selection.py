@@ -5,6 +5,7 @@ import constants
 import deck_selection
 import team_selection
 from button_text_class import ButtonText
+from loading_screen import show_loading_screen
 
 __author__ = "Jérémy Farnault"
 
@@ -80,6 +81,7 @@ class OverlayPointsLeftTeamSelection:
                                                               self.fplayer_name, self.splayer_name, self.fplayer_team,
                                                               None, list()))
                             else:
+                                show_loading_screen(self.screen)
                                 deck_selection.DeckSelection((self.screen, self.clock, self.total_points,
                                                               self.fplayer_name, self.splayer_name, self.fplayer_team,
                                                               self.splayer_team, None, None, list()))

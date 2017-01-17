@@ -4,6 +4,7 @@ import sys
 import constants
 import name_selection_multi_local
 import team_selection
+from loading_screen import show_loading_screen
 from button_text_class import ButtonText
 
 __author__ = "Jérémy Farnault"
@@ -86,6 +87,7 @@ class BattleSizeSelection:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 for button in self.list_buttons:
                     if button.rect.collidepoint(mouse_pos):
+                        show_loading_screen(self.screen)
                         button.on_clic(button.parameters)
 
     def draw(self, mouse_pos):

@@ -123,22 +123,6 @@ class MultiLocalBattle:
                     remove_selected = True
                     # Si la visualisation du deck n'est pas ouverte
                     if not self.deck_open:
-
-
-                        # Second clic sur une case sélectionnée pour le mouvement
-                        if self.selected_movement_tile is not None and self.selected_movement_tile.rect.collidepoint(mouse_pos):
-                            remove_selected = False
-                            for i in range(constants.HeroesDeployment.LINES_BF):
-                                for j in range(constants.HeroesDeployment.COLUMNS_BF):
-                                    if self.selected_movement_tile is not None and self.selected_movement_tile.pos_x == self.battlefield[i][j].pos_x and self.selected_movement_tile.pos_y == self.battlefield[i][j].pos_y:
-                                        self.selected_movement_tile = None
-                                        self.battlefield[i][j].hero = self.selected_hero
-                                        self.battlefield[self.selected_hero.pos_bf_i][self.selected_hero.pos_bf_j].hero = None
-                                        self.current_player_action_points -= 1
-
-
-
-
                         # Contrôle les events de la barre d'initiative
                         temp_return_init = self.init_bar.get_event(event, mouse_pos)
                         if isinstance(temp_return_init, Heroes):
@@ -189,6 +173,15 @@ class MultiLocalBattle:
                                 # Clic sur une case disponible pour le mouvement
                                 elif self.battlefield[i][j].state == "AVAILABLE_HOVERED" or self.battlefield[i][j].state == "AVAILABLE":
                                     self.selected_movement_tile = copy.copy(self.battlefield[i][j])
+                                # Second clic sur une case sélectionnée pour le mouvement
+                                elif self.selected_movement_tile is not None and self.selected_movement_tile.pos_x == \
+                                        self.battlefield[i][j].pos_x and self.selected_movement_tile.pos_y == \
+                                        self.battlefield[i][j].pos_y:
+                                    self.current_player_action_points -= self.selected_movement_tile.movement_cost
+                                    self.selected_movement_tile = None
+                                    self.battlefield[i][j].hero = self.selected_hero
+                                    self.battlefield[self.selected_hero.pos_bf_i][
+                                    self.selected_hero.pos_bf_j].hero = None
                                 break
                     # Déselection du héro courant ou de la case choisie pour le mouvement
                     if remove_selected and self.selected_movement_tile is None:
@@ -317,7 +310,10 @@ class MultiLocalBattle:
                     # Si une case a été sélectionnée pour le mouvement
                     else:
                         if self.battlefield[i][j].pos_x == self.selected_movement_tile.pos_x and self.battlefield[i][j].pos_y == self.selected_movement_tile.pos_y:
-                            self.battlefield[i][j].render_available_hovered(True, True, self.selected_movement_tile.movement_cost < 2)
+                            if temps_rect.collidepoint(mouse_pos):
+                                self.battlefield[i][j].render_selected_hovered(True, self.selected_movement_tile.movement_cost < 2)
+                            else:
+                                self.battlefield[i][j].render_available_hovered(True, True, self.selected_movement_tile.movement_cost < 2)
                         else:
                             self.battlefield[i][j].render_none()
                 else:

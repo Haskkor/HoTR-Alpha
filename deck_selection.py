@@ -11,6 +11,7 @@ from button_text_class import ButtonText
 from cards_class import Cards
 from load_class import Load
 from textbox_class import TextBox
+from loading_screen import show_loading_screen
 
 __author__ = "Jérémy Farnault"
 
@@ -217,11 +218,13 @@ class DeckSelection:
                                 elif button.text == constants.Texts.START:
                                     if self.fplayer_deck is None:
                                         self.fplayer_deck = self.cards_in_deck
+                                        show_loading_screen(self.screen)
                                         self.__init__((self.screen, self.clock, self.total_points, self.fplayer_name,
                                                        self.splayer_name, self.fplayer_team, self.splayer_team,
                                                        self.fplayer_deck, self.splayer_deck, list()))
                                     else:
                                         self.splayer_deck = self.cards_in_deck
+                                        show_loading_screen(self.screen)
                                         heroes_deployment.HeroesDeployment(self.screen, self.clock, self.fplayer_name,
                                                                            self.splayer_name, self.fplayer_team,
                                                                            self.splayer_team, self.fplayer_deck,

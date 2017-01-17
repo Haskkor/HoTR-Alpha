@@ -175,6 +175,7 @@ class ImagesPath:
     DECK = r"assets\various\deck.png"
     FRAME_DETAILS = r"assets\various\frame_details.png"
     INTRO_SCREEN = r"assets\backgrounds\intro_screen.jpg"
+    LOADING = r"assets\various\loading.png"
     MENU_SCREEN = r"assets\backgrounds\menu_screen.jpg"
     MODAL_BSS = r"assets\modals\modal_battle_size_selection.png"
     MODAL_EXIT = r"assets\modals\modal_exit.png"
