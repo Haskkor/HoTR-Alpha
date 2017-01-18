@@ -30,7 +30,7 @@ class AStar(object):
     UTILISATION DE L'ALGORITHME A* POUR LE CALCUL DU CHEMIN LE PLUS COURT
     """
 
-    def __init__(self):
+    def __init__(self, battlefield, hero_pos, max_distance):
         # Carrés libres
         self.opened = []
         heapq.heapify(self.opened)
@@ -40,6 +40,36 @@ class AStar(object):
         self.squares = []
         self.grid_height = constants.Battle.LINES_BF
         self.grid_width = constants.Battle.COLUMNS_BF
+        self.battlefield = battlefield
+        self.max_distance = max_distance
+        self.obstacles = find_obstacles(self.battlefield)
+        self.available_squares = find_available_squares()
+
+    def find_obstacles(battlefield):
+        """
+        Initialisation de la liste d'obstacles
+        """
+        obstacles = []
+        for i in range(self.grid_height):
+            for j in range(self.grid_width):
+                if (battlefield[i][j].hero is not None):
+                    obstacles.append((i,j))
+        return obstacles
+
+    def find_available_squares():
+        """
+        Trouve les cases disponibles par rapport à la case sélectionnée et à la distance maximum
+        Renvoie un dictionnaire avec comme clef les tuples de coordonnées et comme valeurs la distance
+        """
+        available_squares = {}
+        for i in range(grid_height):
+            for j in range(grid_width):
+                if (i,j) != hero_pos and (i,j) not in obstacles:
+                    astar = AStar()
+                    astar.init_grid(obstacles, hero_pos, (i, j))
+                    if len(astar.solve())-1 <= self.max_distance:
+                        available_squares[(i,j)] = len(astar.solve())-1
+        return available_squares
 
     def init_grid(self, obstacles, start, end):
         """
@@ -136,12 +166,3 @@ class AStar(object):
                         self.update_square(adj_square, square)
                         # Ajoute la case adjacente à la liste des cases disponibles
                         heapq.heappush(self.opened, (adj_square.sum_fsts_cste, adj_square))
-
-walls = ((3, 3), (5, 3), (5, 4))
-for i in range(8):
-    for j in range(8):
-        if (i,j) != (4,2) and (i,j) not in walls:
-            gds = AStar()
-            gds.init_grid(walls, (4, 2), (i, j))
-            if len(gds.solve())-1 <= 3:
-                print("({},{})".format(i,j))

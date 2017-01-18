@@ -107,7 +107,7 @@ class SquareBattlefield:
         self.state = "AVAILABLE"
         self.update_rect()
 
-    def render_available_hovered(self, in_battle=False, semi_movement_x=False, semi_movement_y=False):
+    def render_available_hovered(self, in_battle=False, semi_movement=False):
         """
         Case disponible survolé, carré bleu royal légèrement transparent, bords solides, 50*50, images représentant
         les points d'action
@@ -123,11 +123,11 @@ class SquareBattlefield:
         # Affiche les points d'action nécessaires pour effectuer le mouvement
         self.movement_cost = 0
         if in_battle:
-            self.manage_action_points(semi_movement_x, semi_movement_y)
+            self.manage_action_points(semi_movement)
         self.state = "AVAILABLE_HOVERED"
         self.update_rect()
 
-    def render_selected_hovered(self, semi_movement_x=False, semi_movement_y=False):
+    def render_selected_hovered(self, semi_movement=False):
         """
         Case sélectionnée pour le mouvement et survolée, rond bleu royal légèrement transparent, bords solides,
         diamètre 44, images représentant les points d'action
@@ -143,7 +143,7 @@ class SquareBattlefield:
         pygame.draw.circle(self.render, constants.Colors.ELECTRIC_BLUE, (constants.SquareBattlefield.SQUARE // 2,
                                                                          constants.SquareBattlefield.SQUARE // 2),
                            constants.SquareBattlefield.CIRCLE_HEROES, constants.SquareBattlefield.THICK_SMALL)
-        self.manage_action_points(semi_movement_x, semi_movement_y)
+        self.manage_action_points(semi_movement)
         self.state = "SELECTED_HOVERED"
         self.update_rect()
 
@@ -251,11 +251,11 @@ class SquareBattlefield:
             self.hero.battlefield_rect.centerx = self.rect.centerx
             self.hero.battlefield_rect.bottom = self.rect.centery + constants.SquareBattlefield.HEROES_MARGIN_BOT
 
-    def manage_action_points(self, semi_movement_x, semi_movement_y):
+    def manage_action_points(self, semi_movement):
         """
         Affiche et calcule le nombre de points d'action en fonction de la position de la case
         """
-        if semi_movement_x and semi_movement_y:
+        if semi_movement:
             self.ap_movement_1_rect.centerx = self.render.get_rect().centerx
             self.ap_movement_1_rect.centery = self.render.get_rect().centery
             self.render.blit(self.ap_movement_1, self.ap_movement_1_rect)
