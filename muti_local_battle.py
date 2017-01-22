@@ -176,12 +176,17 @@ class MultiLocalBattle:
 
 
                                     if self.selected_hero == self.current_hero:
-                                        if current_player_action_points > 1:
+                                        if self.current_player_action_points > 1:
                                             max_distance = self.selected_hero.speed + 1
                                         else:
-                                            max_distance = (self.selected_hero.speed + 1) // 2 
-                                        astar = available_squares.AStar(self.battlefield, (self.selected_hero..pos_bf_i, self.selected_hero..pos_bf_j), max_distance)
-                                        self.available_movement_squares = astar.available_squares;
+                                            max_distance = (self.selected_hero.speed + 1) // 2
+
+
+
+
+
+                                        astar = available_squares.AStar(self.battlefield, (self.selected_hero.pos_bf_i, self.selected_hero.pos_bf_j), max_distance)
+                                        self.available_movement_squares = astar.available_squares
 
 
 
