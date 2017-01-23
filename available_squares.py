@@ -2,7 +2,29 @@ import heapq
 import constants
 
 __author__ = "Jérémy Farnault"
-# BASED ON THE A* ALGORITHM FROM LAURENT LUCE (http://www.laurentluce.com/posts/solving-mazes-using-python-simple-recursivity-and-a-search/)
+# BASED ON THE A* ALGORITHM FROM LAURENT LUCE
+# (http://www.laurentluce.com/posts/solving-mazes-using-python-simple-recursivity-and-a-search/)
+
+
+class AvailableSquares(object):
+    """
+    CLASSE GENERANT LES APPELS A LA CLASS ASTAR
+    """
+
+    def __init__(self, battlefield, hero_pos, max_distance):
+        """
+        Trouve les cases disponibles par rapport à la case sélectionnée et à la distance maximum
+        Renvoie un dictionnaire avec comme clef les tuples de coordonnées et comme valeurs la distance
+        """
+        self.available_squares = {}
+        for i in range(constants.Battle.COLUMNS_BF):
+            for j in range(constants.Battle.COLUMNS_BF):
+                a_star = AStar(battlefield, max_distance)
+                if (i, j) != hero_pos and (i, j) not in a_star.obstacles:
+                    a_star.init_grid(a_star.obstacles, hero_pos, (i, j))
+                    result = a_star.solve()
+                    if result is not None and len(result) - 1 <= max_distance:
+                        self.available_squares[(i, j)] = len(result) - 1
 
 
 class Square(object):
@@ -30,7 +52,7 @@ class AStar(object):
     UTILISATION DE L'ALGORITHME A* POUR LE CALCUL DU CHEMIN LE PLUS COURT
     """
 
-    def __init__(self, battlefield, hero_pos, max_distance):
+    def __init__(self, battlefield, max_distance):
         # Carrés libres
         self.opened = []
         heapq.heapify(self.opened)
@@ -38,40 +60,24 @@ class AStar(object):
         self.closed = set()
         # Matrice des carrés
         self.squares = []
-        self.grid_height = constants.Battle.LINES_BF
+        self.start = None
+        self.end = None
+        self.grid_height = constants.Battle.COLUMNS_BF
         self.grid_width = constants.Battle.COLUMNS_BF
         self.battlefield = battlefield
         self.max_distance = max_distance
-        self.hero_pos = hero_pos
         self.obstacles = self.find_obstacles(self.battlefield)
-        self.available_squares = self.find_available_squares()
 
     def find_obstacles(self, battlefield):
         """
         Initialisation de la liste d'obstacles
         """
         obstacles = []
-        for i in range(self.grid_height):
-            for j in range(self.grid_width):
-                if battlefield[i][j].hero is not None:
+        for i in range(self.grid_width):
+            for j in range(self.grid_height):
+                if i < len(battlefield) and battlefield[i][j].hero is not None:
                     obstacles.append((i, j))
         return obstacles
-
-    def find_available_squares(self):
-        """
-        Trouve les cases disponibles par rapport à la case sélectionnée et à la distance maximum
-        Renvoie un dictionnaire avec comme clef les tuples de coordonnées et comme valeurs la distance
-        """
-        available_squares = {}
-        for i in range(self.grid_height):
-            for j in range(self.grid_width):
-                if (i, j) != self.hero_pos and (i, j) not in self.obstacles:
-                    #a_star = AStar(self.battlefield, self.hero_pos, self.max_distance)
-                    self.init_grid(self.obstacles, self.hero_pos, (i, j))
-                    result = self.solve()
-                    if result is not None and len(result) - 1 <= self.max_distance:
-                        available_squares[(i, j)] = len(result) - 1
-        return available_squares
 
     def init_grid(self, obstacles, start, end):
         """
@@ -128,7 +134,6 @@ class AStar(object):
             square = square.parent
             path.append((square.x, square.y))
         path.append((self.start.x, self.start.y))
-        path.reverse()
         return path
 
     def update_square(self, adj, square):
