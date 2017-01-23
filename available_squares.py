@@ -17,25 +17,13 @@ class AvailableSquares(object):
         Renvoie un dictionnaire avec comme clef les tuples de coordonnées et comme valeurs la distance
         """
         self.available_squares = {}
-
-        if hero_pos[0] - max_distance >= 0:
-            start_i = hero_pos[0] - max_distance
-        else:
-            start_i = 0
-        if hero_pos[0] + max_distance < constants.Battle.COLUMNS_BF:
-            end_i = hero_pos[0] + max_distance
-        else:
-            end_i = constants.Battle.COLUMNS_BF
-
-        if hero_pos[1] - max_distance >= 0:
-            start_j = hero_pos[1] - max_distance
-        else:
-            start_j = 0
-        if hero_pos[1] + max_distance < constants.Battle.COLUMNS_BF:
-            end_j = hero_pos[1] + max_distance
-        else:
-            end_j = constants.Battle.COLUMNS_BF
-        
+        # Réduit la taille de la matrice de recherche
+        start_i = hero_pos[0] - max_distance if hero_pos[0] - max_distance >= 0 else 0
+        end_i = hero_pos[0] + max_distance + 1 if hero_pos[0] + max_distance < constants.Battle.COLUMNS_BF \
+            else constants.Battle.COLUMNS_BF
+        start_j = hero_pos[1] - max_distance if hero_pos[1] - max_distance >= 0 else 0
+        end_j = hero_pos[1] + max_distance + 1 if hero_pos[1] + max_distance < constants.Battle.COLUMNS_BF \
+            else constants.Battle.COLUMNS_BF
         for i in range(start_i, end_i):
             for j in range(start_j, end_j):
 
@@ -60,7 +48,7 @@ class Square(object):
         self.from_start_to_square = 0
         self.cost_square_to_end = 0
         self.sum_fsts_cste = 0
-        
+
     def __lt__(self, other):
             if isinstance(other, Square):
                 return self.sum_fsts_cste < other.sum_fsts_cste
@@ -108,7 +96,9 @@ class AStar(object):
         """
         for x in range(self.grid_width):
             for y in range(self.grid_height):
-                if x >= len(battlefield) or (x, y) in obstacles:
+                # L'algorithme ne fonctionne correctement que si la matrice est carrée. La première condition ignore
+                # les cases rajoutée pour palier ce problème
+                if x >= len(self.battlefield) or (x, y) in obstacles:
                     reachable = False
                 else:
                     reachable = True
