@@ -17,7 +17,7 @@ from loading_screen import show_loading_screen
 
 __author__ = "Jérémy Farnault"
 
-ùpoopplklkkplkllklokokpkkokppàçà_iyiyuiuuyyyèygyyl:;iiiioi_çççuuuàuop
+
 def leave():
     pygame.quit()
     sys.exit()
