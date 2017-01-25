@@ -14,6 +14,7 @@ import available_squares
 from button_text_class import ButtonText
 from heroes_class import Heroes
 from loading_screen import show_loading_screen
+from state_square_battlefield_enum import StateSquareBattlefield
 
 __author__ = "Jérémy Farnault"
 
@@ -174,7 +175,7 @@ class MultiLocalBattle:
                                 if self.battlefield[i][j].hero is not None:
                                     self.selected_hero = self.battlefield[i][j].hero
                                 # Clic sur une case disponible pour le mouvement
-                                elif self.battlefield[i][j].state == "AVAILABLE_HOVERED" or self.battlefield[i][j].state == "AVAILABLE":
+                                elif self.battlefield[i][j].state == StateSquareBattlefield.available_hovered or self.battlefield[i][j].state == StateSquareBattlefield.available:
                                     self.selected_movement_tile = copy.copy(self.battlefield[i][j])
                                 # Second clic sur une case sélectionnée pour le mouvement
                                 elif self.selected_movement_tile is not None and self.selected_movement_tile.pos_x == \

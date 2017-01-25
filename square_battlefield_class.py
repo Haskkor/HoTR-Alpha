@@ -1,6 +1,7 @@
 import pygame
 
 import constants
+from state_square_battlefield_enum import StateSquareBattlefield
 
 __author__ = "Jérémy Farnault"
 
@@ -40,7 +41,7 @@ class SquareBattlefield:
         pygame.draw.rect(self.render, constants.Colors.ELECTRIC_BLUE, (0, 0, constants.SquareBattlefield.HEROES - 1,
                                                                        constants.SquareBattlefield.HEROES - 1),
                          constants.SquareBattlefield.THICK_SMALL)
-        self.state = "CURRENT"
+        self.state = StateSquareBattlefield.current
         self.update_rect()
 
     def render_hero(self):
@@ -55,7 +56,7 @@ class SquareBattlefield:
         pygame.draw.rect(self.render, constants.Colors.DARK_SLATE_GRAY, (0, 0, constants.SquareBattlefield.HEROES - 1,
                                                                          constants.SquareBattlefield.HEROES - 1),
                          constants.SquareBattlefield.THICK_SMALL)
-        self.state = "HERO"
+        self.state = StateSquareBattlefield.hero
         self.update_rect()
 
     def render_hero_selected(self):
@@ -73,7 +74,7 @@ class SquareBattlefield:
         pygame.draw.circle(self.render, constants.Colors.GOLD, (constants.SquareBattlefield.SQUARE // 2,
                                                                 constants.SquareBattlefield.SQUARE // 2),
                            constants.SquareBattlefield.CIRCLE_HEROES, constants.SquareBattlefield.THICK_SMALL)
-        self.state = "HERO_SELECTED"
+        self.state = StateSquareBattlefield.hero_selected
         self.update_rect()
 
     def render_hero_hovered(self):
@@ -89,7 +90,7 @@ class SquareBattlefield:
         pygame.draw.circle(self.render, constants.Colors.GOLD, (constants.SquareBattlefield.SQUARE // 2,
                                                                 constants.SquareBattlefield.SQUARE // 2),
                            constants.SquareBattlefield.CIRCLE_HEROES, constants.SquareBattlefield.THICK_SMALL)
-        self.state = "HERO_HOVERED"
+        self.state = StateSquareBattlefield.hero_hovered
         self.update_rect()
 
     def render_available(self):
@@ -104,7 +105,7 @@ class SquareBattlefield:
         pygame.draw.rect(self.render, constants.Colors.ELECTRIC_BLUE, (0, 0, constants.SquareBattlefield.SQUARE - 1,
                                                                        constants.SquareBattlefield.SQUARE - 1),
                          constants.SquareBattlefield.THICK_SMALL)
-        self.state = "AVAILABLE"
+        self.state = StateSquareBattlefield.available
         self.update_rect()
 
     def render_available_hovered(self, in_battle=False, semi_movement=False):
@@ -124,7 +125,7 @@ class SquareBattlefield:
         self.movement_cost = 0
         if in_battle:
             self.manage_action_points(semi_movement)
-        self.state = "AVAILABLE_HOVERED"
+        self.state = StateSquareBattlefield.available_hovered
         self.update_rect()
 
     def render_selected_hovered(self, semi_movement=False):
@@ -144,7 +145,7 @@ class SquareBattlefield:
                                                                          constants.SquareBattlefield.SQUARE // 2),
                            constants.SquareBattlefield.CIRCLE_HEROES, constants.SquareBattlefield.THICK_SMALL)
         self.manage_action_points(semi_movement)
-        self.state = "SELECTED_HOVERED"
+        self.state = StateSquareBattlefield.selected_hovered
         self.update_rect()
 
     def render_hero_attack(self):
@@ -161,7 +162,7 @@ class SquareBattlefield:
         pygame.draw.rect(self.render, constants.Colors.ORANGE_RED, (0, 0, constants.SquareBattlefield.LITTLE_SQUARE - 1,
                                                                     constants.SquareBattlefield.LITTLE_SQUARE - 1),
                          constants.SquareBattlefield.THICK_BIG)
-        self.state = "HERO_ATTACK"
+        self.state = StateSquareBattlefield.hero_attack
         self.update_rect()
 
     def render_hero_magic(self):
@@ -178,7 +179,7 @@ class SquareBattlefield:
         pygame.draw.rect(self.render, constants.Colors.PURPLE, (0, 0, constants.SquareBattlefield.LITTLE_SQUARE - 1,
                                                                 constants.SquareBattlefield.LITTLE_SQUARE - 1),
                          constants.SquareBattlefield.THICK_BIG)
-        self.state = "HERO_MAGIC"
+        self.state = StateSquareBattlefield.hero_magic
         self.update_rect()
 
     def render_foe(self):
@@ -193,7 +194,7 @@ class SquareBattlefield:
         pygame.draw.rect(self.render, constants.Colors.DARK_RED, (0, 0, constants.SquareBattlefield.HEROES - 1,
                                                                   constants.SquareBattlefield.HEROES - 1),
                          constants.SquareBattlefield.THICK_SMALL)
-        self.state = "FOE"
+        self.state = StateSquareBattlefield.foe
         self.update_rect()
 
     def render_foe_hovered(self):
@@ -208,7 +209,7 @@ class SquareBattlefield:
         pygame.draw.circle(self.render, constants.Colors.RED, (constants.SquareBattlefield.SQUARE // 2,
                                                                constants.SquareBattlefield.SQUARE // 2),
                            constants.SquareBattlefield.CIRCLE_HEROES, constants.SquareBattlefield.THICK_SMALL)
-        self.state = "FOE_HOVERED"
+        self.state = StateSquareBattlefield.foe_hovered
         self.update_rect()
 
     def render_foe_selected(self):
@@ -226,7 +227,7 @@ class SquareBattlefield:
         pygame.draw.circle(self.render, constants.Colors.RED, (constants.SquareBattlefield.SQUARE // 2,
                                                                constants.SquareBattlefield.SQUARE // 2),
                            constants.SquareBattlefield.CIRCLE_HEROES, constants.SquareBattlefield.THICK_SMALL)
-        self.state = "FOE_SELECTED"
+        self.state = StateSquareBattlefield.foe_selected
         self.update_rect()
 
     def render_none(self):
