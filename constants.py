@@ -6,7 +6,20 @@ __author__ = "Jérémy Farnault"
 class ActionPointsZone:
     # Zone des points d'action
     HEIGHT = 120
+    IMAGE_1_Y = 0
+    IMAGE_2_Y = 40
+    IMAGE_3_Y = 80
+    IMAGES_X = 5
     WIDTH = 40
+    ZONE_POS_X = 10
+    ZONE_POS_Y = 10
+
+
+class ActionsSelectionZone:
+    # Zone de sélection des actions disponibles
+    HEIGHT = 350
+    WIDTH = 130
+    ZONE_POS_Y = 0
 
 
 class Battle:
@@ -51,11 +64,13 @@ class Colors:
     DARK_RED = (102, 0, 0, 255)
     DARK_SLATE_GRAY = (47, 79, 79, 255)
     DARK_SLATE_GRAY_100_ALPHA = (47, 79, 79, 100)
+    DARK_SLATE_GRAY_150_ALPHA = (47, 79, 79, 100)
     ELECTRIC_BLUE = (44, 117, 255, 255)
     ELECTRIC_BLUE_150_ALPHA = (44, 117, 255, 150)
     GOLD = (255, 215, 0, 255)
     GOLD_150_ALPHA = (255, 215, 0, 150)
     ORANGE_RED = (255, 69, 0, 255)
+    ORANGE_RED_150_ALPHA = (255, 69, 0, 150)
     OVERLAY_ALPHA = 220
     PURPLE = (127, 0, 255, 255)
     RED = (255, 0, 0, 255)

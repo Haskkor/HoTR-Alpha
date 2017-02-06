@@ -1,5 +1,6 @@
 import constants
 import pygame
+from action_type_enum import ActionType
 
 __author__ = "Jérémy Farnault"
 
@@ -56,6 +57,7 @@ class Heroes:
         self.pos_bf_i = None
         self.pos_bf_j = None
         self.process_kwargs(kwargs)
+        self.actions_list = self.get_actions_list()
         self.process_fonts()
         self.update_images()
 
@@ -64,6 +66,17 @@ class Heroes:
         for kwarg in kwargs:
             defaults[kwarg] = kwargs[kwarg]
         self.__dict__.update(defaults)
+
+    def get_actions_list(self):
+        """
+        Fabrique une liste comportant les actions disponibles
+        """
+        actions_list = [ActionType.MOVEMENT, ActionType.DEFENSE, ActionType.ATTACK, ActionType.SPECIAL_ATTACK]
+        if self.magic_points > 0:
+            actions_list.append(ActionType.MAGIC)
+        if self.scope > 0:
+            actions_list.append(ActionType.RANGED_ATTACK)
+        return actions_list
 
     def process_fonts(self):
         """
@@ -139,11 +152,11 @@ class Heroes:
         """
         for skill in self.skills:
             temp_skill = skill
-            while len(temp_skill) >= constants.TeamSelection.SIZE_TEXT_MULTILINES+1:
-                for i in range(constants.TeamSelection.SIZE_TEXT_MULTILINES+1, 0, -1):
+            while len(temp_skill) >= constants.TeamSelection.SIZE_TEXT_MULTILINES + 1:
+                for i in range(constants.TeamSelection.SIZE_TEXT_MULTILINES + 1, 0, -1):
                     if temp_skill[i] == " ":
                         yield font.render(temp_skill[:i], 1, constants.Colors.WHITE)
-                        temp_skill = temp_skill[i+1:]
+                        temp_skill = temp_skill[i + 1:]
                         break
             yield font.render(temp_skill, 1, constants.Colors.WHITE)
 
@@ -156,7 +169,7 @@ class Heroes:
             for i in range(constants.TeamSelection.SIZE_TEXT_MULTILINES, 0, -1):
                 if descr[i] == " ":
                     yield font.render(descr[:i], 1, constants.Colors.WHITE)
-                    descr = descr[i+1:]
+                    descr = descr[i + 1:]
                     break
         yield font.render(descr, 1, constants.Colors.WHITE)
 

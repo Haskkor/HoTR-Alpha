@@ -240,7 +240,7 @@ class HeroesDeployment:
 
     def treat_heroes_double(self, team):
         """
-        Créations de nouvelles de héros pour les éléments sélectionnées en plusieurs exemplaires
+        Créations de nouvelles instances de héros pour les éléments sélectionnées en plusieurs exemplaires
         """
         team_to_return = list()
         for hero in team:
@@ -265,7 +265,7 @@ class HeroesDeployment:
 
     def treat_cards_double(self, deck):
         """
-        Créations de nouvelles de cartes pour les éléments sélectionnées en plusieurs exemplaires
+        Créations de nouvelles instances de cartes pour les éléments sélectionnées en plusieurs exemplaires
         """
         deck_to_return = list()
         for card in deck:
@@ -287,11 +287,11 @@ class HeroesDeployment:
         Lance la prochaine page
         """
         if not self.is_fplayer_deployed:
-            self.__init__(self.screen, self.clock, self.fplayer_name, self.splayer_name, self.fplayer_team,
+            self.__init__(self.screen, self.clock, self.fplayer_name, self.splayer_name, self.team,
                           self.splayer_team, self.deck, self.splayer_deck, True)
         else:
             muti_local_battle.MultiLocalBattle(self.screen, self.clock, self.fplayer_name, self.splayer_name,
-                                               self.fplayer_team, self.splayer_team, self.fplayer_deck,
+                                               self.fplayer_team, self.team, self.fplayer_deck,
                                                self.deck)
 
     def update_battlefield(self, mouse_pos):

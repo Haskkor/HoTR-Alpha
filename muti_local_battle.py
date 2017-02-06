@@ -4,6 +4,7 @@ import sys
 import pygame
 
 import action_points_zone
+import actions_selection_zone
 import constants
 import deck_visualization_class
 import hero_details_zone
@@ -15,6 +16,7 @@ from button_text_class import ButtonText
 from heroes_class import Heroes
 from loading_screen import show_loading_screen
 from state_square_battlefield_enum import StateSquareBattlefield
+from action_type_enum import ActionType
 
 __author__ = "Jérémy Farnault"
 
@@ -39,7 +41,7 @@ class MultiLocalBattle:
         self.splayer_team = splayer_team
         self.fplayer_deck = fplayer_deck
         self.splayer_deck = splayer_deck
-        # Le premier jour commence
+        # Le premier joueur commence
         self.current_player = fplayer_name
         self.current_player_action_points = constants.Battle.ACTION_POINTS
         # Pas de carte tirée
@@ -81,10 +83,13 @@ class MultiLocalBattle:
         self.update_teams_points()
         # Barre d'initiative
         self.init_bar = initiative_bar_class.InitiativeBar(player_team=self.fplayer_team, adv_team=self.splayer_team)
-        # Points d'action
-        self.action_points_zone = action_points_zone.ActionPointsZone()
         # Héro courant
         self.current_hero = self.init_bar.heroes_sorted[0]
+        # Points d'action
+        self.action_points_zone = action_points_zone.ActionPointsZone()
+        # Sélection des actions
+        self.actions_selection_zone = actions_selection_zone.ActionsSelectionZone(ActionType.MOVEMENT in self.current_hero.actions_list, ActionType.ATTACK in self.current_hero.actions_list, ActionType.RANGED_ATTACK in self.current_hero.actions_list, ActionType.DEFENSE in self.current_hero.actions_list, ActionType.SPECIAL_ATTACK in self.current_hero.actions_list, ActionType.MAGIC in self.current_hero.actions_list)
+        self.current_action = None
         # Zone des détails du héro
         self.hero_details_zone = hero_details_zone.HeroDetailsZone()
         # Image du deck
@@ -136,6 +141,11 @@ class MultiLocalBattle:
                         elif isinstance(temp_return_init, bool):
                             remove_selected = False
                             self.end_turn(False)
+                        # Clic sur une action dans la zone de sélection
+                        if self.actions_selection_zone.surface_rect.collidepoint(mouse_pos):
+                            self.current_action = self.actions_selection_zone.get_event(event)
+                            if self.current_action != None:
+                                remove_selected = False
                         # Ouvre le deck au clic sur l'image
                         if self.deck_image_rect.collidepoint(mouse_pos):
                             remove_selected = False
@@ -216,6 +226,8 @@ class MultiLocalBattle:
             self.screen.blit(self.points_opp_team_render, self.points_opp_team_rect)
             # Affiche le visuel des points d'action
             self.action_points_zone.draw(self.screen, self.current_player_action_points)
+            # Affiche le visuel des actions sélectionnables
+            self.actions_selection_zone.draw(self.screen, mouse_pos)
             # Affiche les détails du héros sélectionné
             if self.selected_hero is not None:
                 self.hero_details_zone.draw(self.screen, self.selected_hero)
@@ -306,7 +318,7 @@ class MultiLocalBattle:
                         self.battlefield[i][j].render_foe()
                 # Cases disponibles pour le déplacement, en fonction de la vitesse du héros et des points d'action
                 # disponibles
-                elif self.selected_hero == self.current_hero and (i, j) in self.available_movement_squares.keys():
+                elif self.selected_hero == self.current_hero and self.current_action == ActionType.MOVEMENT and (i, j) in self.available_movement_squares.keys():
                     temps_rect = pygame.Rect(self.battlefield[i][j].rect.left + 1, self.battlefield[i][j].rect.top + 1,
                                              self.battlefield[i][j].rect.width - 1,
                                              self.battlefield[i][j].rect.height - 1)

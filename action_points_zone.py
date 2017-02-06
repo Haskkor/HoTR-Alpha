@@ -1,4 +1,6 @@
 import pygame
+from django.contrib.gis.db.backends.postgis import const
+
 import constants
 
 __author__ = "Jérémy Farnault"
@@ -13,8 +15,8 @@ class ActionPointsZone:
         self.surface = pygame.Surface((constants.ActionPointsZone.WIDTH, constants.ActionPointsZone.HEIGHT),
                                       pygame.SRCALPHA)
         self.surface_rect = self.surface.get_rect()
-        self.surface_rect.left = 10
-        self.surface_rect.top = 10
+        self.surface_rect.left = constants.ActionPointsZone.ZONE_POS_X
+        self.surface_rect.top = constants.ActionPointsZone.ZONE_POS_Y
         self.ap_unused_top = pygame.image.load(constants.ImagesPath.ACTION_POINT_UNUSED)
         self.ap_unused_top_rect = self.ap_unused_top.get_rect()
         self.ap_unused_mid = pygame.image.load(constants.ImagesPath.ACTION_POINT_UNUSED)
@@ -29,47 +31,47 @@ class ActionPointsZone:
         self.ap_used_bot_rect = self.ap_used_bot.get_rect()
 
     def number_0(self):
-        self.ap_used_top_rect.top = 0
-        self.ap_used_top_rect.left = 5
+        self.ap_used_top_rect.top = constants.ActionPointsZone.IMAGE_1_Y
+        self.ap_used_top_rect.left = constants.ActionPointsZone.IMAGES_X
         self.surface.blit(self.ap_used_top, self.ap_used_top_rect)
-        self.ap_used_mid_rect.top = 40
-        self.ap_used_mid_rect.left = 5
+        self.ap_used_mid_rect.top = constants.ActionPointsZone.IMAGE_2_Y
+        self.ap_used_mid_rect.left = constants.ActionPointsZone.IMAGES_X
         self.surface.blit(self.ap_used_mid, self.ap_used_mid_rect)
-        self.ap_used_bot_rect.top = 80
-        self.ap_used_bot_rect.left = 5
+        self.ap_used_bot_rect.top = constants.ActionPointsZone.IMAGE_3_Y
+        self.ap_used_bot_rect.left = constants.ActionPointsZone.IMAGES_X
         self.surface.blit(self.ap_used_bot, self.ap_used_bot_rect)
 
     def number_1(self):
-        self.ap_unused_top_rect.top = 0
-        self.ap_unused_top_rect.left = 5
+        self.ap_unused_top_rect.top = constants.ActionPointsZone.IMAGE_1_Y
+        self.ap_unused_top_rect.left = constants.ActionPointsZone.IMAGES_X
         self.surface.blit(self.ap_unused_top, self.ap_unused_top_rect)
-        self.ap_used_mid_rect.top = 40
-        self.ap_used_mid_rect.left = 5
+        self.ap_used_mid_rect.top = constants.ActionPointsZone.IMAGE_2_Y
+        self.ap_used_mid_rect.left = constants.ActionPointsZone.IMAGES_X
         self.surface.blit(self.ap_used_mid, self.ap_used_mid_rect)
-        self.ap_used_bot_rect.top = 80
-        self.ap_used_bot_rect.left = 5
+        self.ap_used_bot_rect.top = constants.ActionPointsZone.IMAGE_3_Y
+        self.ap_used_bot_rect.left = constants.ActionPointsZone.IMAGES_X
         self.surface.blit(self.ap_used_bot, self.ap_used_bot_rect)
 
     def number_2(self):
-        self.ap_unused_top_rect.top = 0
-        self.ap_unused_top_rect.left = 5
+        self.ap_unused_top_rect.top = constants.ActionPointsZone.IMAGE_1_Y
+        self.ap_unused_top_rect.left = constants.ActionPointsZone.IMAGES_X
         self.surface.blit(self.ap_unused_top, self.ap_unused_top_rect)
-        self.ap_unused_mid_rect.top = 40
-        self.ap_unused_mid_rect.left = 5
+        self.ap_unused_mid_rect.top = constants.ActionPointsZone.IMAGE_2_Y
+        self.ap_unused_mid_rect.left = constants.ActionPointsZone.IMAGES_X
         self.surface.blit(self.ap_unused_mid, self.ap_unused_mid_rect)
-        self.ap_used_bot_rect.top = 80
-        self.ap_used_bot_rect.left = 5
+        self.ap_used_bot_rect.top = constants.ActionPointsZone.IMAGE_3_Y
+        self.ap_used_bot_rect.left = constants.ActionPointsZone.IMAGES_X
         self.surface.blit(self.ap_used_bot, self.ap_used_bot_rect)
 
     def number_3(self):
-        self.ap_unused_top_rect.top = 0
-        self.ap_unused_top_rect.left = 5
+        self.ap_unused_top_rect.top = constants.ActionPointsZone.IMAGE_1_Y
+        self.ap_unused_top_rect.left = constants.ActionPointsZone.IMAGES_X
         self.surface.blit(self.ap_unused_top, self.ap_unused_top_rect)
-        self.ap_unused_mid_rect.top = 40
-        self.ap_unused_mid_rect.left = 5
+        self.ap_unused_mid_rect.top = constants.ActionPointsZone.IMAGE_2_Y
+        self.ap_unused_mid_rect.left = constants.ActionPointsZone.IMAGES_X
         self.surface.blit(self.ap_unused_mid, self.ap_unused_mid_rect)
-        self.ap_unused_bot_rect.top = 80
-        self.ap_unused_bot_rect.left = 5
+        self.ap_unused_bot_rect.top = constants.ActionPointsZone.IMAGE_3_Y
+        self.ap_unused_bot_rect.left = constants.ActionPointsZone.IMAGES_X
         self.surface.blit(self.ap_unused_bot, self.ap_unused_bot_rect)
 
     def draw(self, screen, current_action_points):
