@@ -16,6 +16,8 @@ class StateSquareBattlefield(Enum):
     available_hovered = "AVAILABLE_HOVERED"
     selected_hovered = "SELECTED_HOVERED"
     hero_attack = "HERO_ATTACK"
+    hero_attack_with_foe = "HERO_ATTACK_WITH_FOE"
+    hero_attack_with_foe_hovered = "HERO_ATTACK_WITH_FOE_HOVERED"
     hero_magic = "HERO_MAGIC"
     foe = "FOE"
     foe_hovered = "FOE_HOVERED"

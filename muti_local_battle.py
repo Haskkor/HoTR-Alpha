@@ -114,6 +114,7 @@ class MultiLocalBattle:
         # Héros sélectionné
         self.selected_hero = None
         self.available_movement_squares = None
+        self.available_attack_squares = None
         # Case sélectionnée pour le mouvement
         self.selected_movement_tile = None
         # Affiche le nom du joueur courant
@@ -121,6 +122,8 @@ class MultiLocalBattle:
         self.render_text_name_rect = self.render_text_name.get_rect()
         self.render_text_name_rect.right = self.deck_image_rect.left - constants.Battle.PLAYER_NAME_MARGIN
         self.render_text_name_rect.bottom = self.deck_image_rect.bottom
+        self.calculate_available_movement_squares()
+        self.calculate_available_attack_squares()
         self.run()
 
     def get_event(self, events, mouse_pos):
@@ -197,6 +200,9 @@ class MultiLocalBattle:
                                     self.battlefield[self.selected_hero.pos_bf_i][self.selected_hero.pos_bf_j].hero = None
                                     self.current_hero.pos_bf_i, self.current_hero.pos_bf_j = i, j
                                     self.calculate_available_movement_squares()
+                                    self.calculate_available_attack_squares()
+                                    self.actions_selection_zone.update_actions(self.current_player_action_points)
+                                    self.current_action = None
                                 break
                     # Déselection du héro courant ou de la case choisie pour le mouvement
                     if remove_selected and self.selected_movement_tile is None:
@@ -291,6 +297,16 @@ class MultiLocalBattle:
                 avail_squares = available_squares.AvailableSquares(self.battlefield, (self.current_hero.pos_bf_i, self.current_hero.pos_bf_j), self.current_hero.speed // 2)
             self.available_movement_squares = avail_squares.available_squares
 
+    def calculate_available_attack_squares(self):
+        """
+        Calcule les cases disponibles pour l'attaque du héro
+        """
+        self.available_attack_squares = []
+        for i in range(self.current_hero.pos_x - 1, self.current_hero.pos_x + 2):
+            for j in range(self.current_hero.pos_y - 1, self.current_hero.pos_y + 2):
+                if 0 <= i < constants.LINES_BF and 0 <= j < constants.COLUMNS_BF and (self.battlefield[i][j].hero is None or (self.battlefield[i][j].hero is not None and self.battlefield[i][j].hero.player_name != self.current_hero.player_name)):
+                    self.available_attack_squares.append((i, j))
+
     def update_battlefield(self, mouse_pos):
         """
         Met à jour les cases du champ de bataille
@@ -316,26 +332,44 @@ class MultiLocalBattle:
                         self.battlefield[i][j].render_hero()
                     else:
                         self.battlefield[i][j].render_foe()
-                # Cases disponibles pour le déplacement, en fonction de la vitesse du héros et des points d'action
-                # disponibles
-                elif self.selected_hero == self.current_hero and self.current_action == ActionType.MOVEMENT and (i, j) in self.available_movement_squares.keys():
+                # Visuel des cases en fonction de l'action sélectionnée
+                elif self.selected_hero == self.current_hero:
                     temps_rect = pygame.Rect(self.battlefield[i][j].rect.left + 1, self.battlefield[i][j].rect.top + 1,
-                                             self.battlefield[i][j].rect.width - 1,
-                                             self.battlefield[i][j].rect.height - 1)
-                    if self.selected_movement_tile is None:
-                        if temps_rect.collidepoint(mouse_pos):
-                            self.battlefield[i][j].render_available_hovered(True, self.available_movement_squares[(i, j)] <= self.current_hero.speed // 2)
-                        else:
-                            self.battlefield[i][j].render_available()
-                    # Si une case a été sélectionnée pour le mouvement
-                    else:
-                        if self.battlefield[i][j].pos_x == self.selected_movement_tile.pos_x and self.battlefield[i][j].pos_y == self.selected_movement_tile.pos_y:
+                                                 self.battlefield[i][j].rect.width - 1,
+                                                 self.battlefield[i][j].rect.height - 1)
+                    # Cases disponibles pour le déplacement
+                    if self.current_action == ActionType.MOVEMENT and (i, j) in self.available_movement_squares.keys():                        
+                        if self.selected_movement_tile is None:
                             if temps_rect.collidepoint(mouse_pos):
-                                self.battlefield[i][j].render_selected_hovered(self.selected_movement_tile.movement_cost < 2)
+                                self.battlefield[i][j].render_available_hovered(True, self.available_movement_squares[(i, j)] <= self.current_hero.speed // 2)
                             else:
-                                self.battlefield[i][j].render_available_hovered(True, self.selected_movement_tile.movement_cost < 2)
+                                self.battlefield[i][j].render_available()
+                        # Si une case a été sélectionnée pour le mouvement
                         else:
-                            self.battlefield[i][j].render_none()
+                            if self.battlefield[i][j].pos_x == self.selected_movement_tile.pos_x and self.battlefield[i][j].pos_y == self.selected_movement_tile.pos_y:
+                                if temps_rect.collidepoint(mouse_pos):
+                                    self.battlefield[i][j].render_selected_hovered(self.selected_movement_tile.movement_cost < 2)
+                                else:
+                                    self.battlefield[i][j].render_available_hovered(True, self.selected_movement_tile.movement_cost < 2)
+                            else:
+                                self.battlefield[i][j].render_none()
+
+
+
+                    # Cases disponibles pour l'attaque
+                    elif self.current_action == ActionType.ATTACK and (i, j) in self.available_attack_squares:
+                        if self.battlefield[i][j].hero is not None:
+                            if temps_rect.collidepoint(mouse_pos):
+                                self.battlefield[i][j].render_hero_attack_with_foe_hovered()
+                            else:
+                                self.battlefield[i][j].render_hero_attack_with_foe()
+                        else:
+                            self.battlefield[i][j].render_hero_attack()
+
+
+
+
+
                 else:
                     self.battlefield[i][j].render_none()
 
@@ -359,11 +393,14 @@ class MultiLocalBattle:
         self.current_hero = self.init_bar.heroes_sorted[0]
         self.current_player_action_points = constants.Battle.ACTION_POINTS
         self.calculate_available_movement_squares()
+        self.calculate_available_attack_squares()
         self.current_player = self.init_bar.heroes_sorted[0].player_name
         self.render_text_name = self.font_name.render(self.current_player, 1, constants.Colors.WHITE)
         self.card_drawn = False
         self.fplayer_deck_visualization.card_drawn = False
         self.splayer_deck_visualization.card_drawn = False
+        self.actions_selection_zone = actions_selection_zone.ActionsSelectionZone(ActionType.MOVEMENT in self.current_hero.actions_list, ActionType.ATTACK in self.current_hero.actions_list, ActionType.RANGED_ATTACK in self.current_hero.actions_list, ActionType.DEFENSE in self.current_hero.actions_list, ActionType.SPECIAL_ATTACK in self.current_hero.actions_list, ActionType.MAGIC in self.current_hero.actions_list)
+        self.current_action = None
         self.timer = timer_class.Timer(timer_min=constants.Battle.MIN_TIMER,
                                        timer_sec=constants.Battle.SEC_TIMER, font=self.font_medium,
                                        pos_centerx=self.screen.get_rect().centerx,
@@ -372,7 +409,6 @@ class MultiLocalBattle:
 
     def run(self):
         done = False
-        self.calculate_available_movement_squares()
         while not done:
             mouse_pos = pygame.mouse.get_pos()
             self.timer.update_timer()

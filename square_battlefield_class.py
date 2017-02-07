@@ -165,6 +165,40 @@ class SquareBattlefield:
         self.state = StateSquareBattlefield.hero_attack
         self.update_rect()
 
+    def render_hero_attack_with_foe(self):
+        """
+        Case disponible pour l'attaque avec ennemi, carré orange légèrement transparent, bords solides, 44*44
+        """
+        self.pos_x = self.orig_pos_x + constants.SquareBattlefield.SQUARE // 2 - constants.SquareBattlefield.HEROES // 2
+        self.pos_y = self.orig_pos_y + constants.SquareBattlefield.SQUARE // 2 - constants.SquareBattlefield.HEROES // 2
+        self.render = pygame.Surface((constants.SquareBattlefield.HEROES, constants.SquareBattlefield.HEROES),
+                                     pygame.SRCALPHA)
+        self.render.fill(constants.Colors.ORANGE_RED_150_ALPHA)
+        pygame.draw.rect(self.render, constants.Colors.ORANGE_RED, (0, 0, constants.SquareBattlefield.SQUARE - 1,
+                                                                       constants.SquareBattlefield.SQUARE - 1),
+                         constants.SquareBattlefield.THICK_SMALL)
+        self.state = StateSquareBattlefield.hero_attack_with_foe
+        self.update_rect()
+
+    def render_hero_attack_with_foe_hovered(self):
+        """
+        Case disponible pour l'attaque avec ennemi survolée, rond orange légèrement transparent, bords solide, diamètre 44
+        """
+
+        self.pos_x = self.orig_pos_x
+        self.pos_y = self.orig_pos_y
+        self.render = pygame.Surface((constants.SquareBattlefield.SQUARE, constants.SquareBattlefield.SQUARE),
+                                     pygame.SRCALPHA)
+        self.render.fill(constants.Colors.BLACK_FULL_ALPHA)
+        pygame.draw.circle(self.render, constants.Colors.ORANGE_RED_150_ALPHA,
+                           (constants.SquareBattlefield.SQUARE // 2, constants.SquareBattlefield.SQUARE // 2),
+                           constants.SquareBattlefield.CIRCLE_HEROES, 0)
+        pygame.draw.circle(self.render, constants.Colors.ORANGE_RED, (constants.SquareBattlefield.SQUARE // 2,
+                                                                         constants.SquareBattlefield.SQUARE // 2),
+                           constants.SquareBattlefield.CIRCLE_HEROES, constants.SquareBattlefield.THICK_SMALL)
+        self.state = StateSquareBattlefield.hero_attack_with_foe_hovered
+        self.update_rect()
+
     def render_hero_magic(self):
         """
         Case disponible pour magie, carré violet, intérieur gris très transparent, bords solides, 25*25

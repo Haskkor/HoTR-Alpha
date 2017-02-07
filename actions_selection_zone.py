@@ -57,6 +57,17 @@ class ActionsSelectionZone:
                     return action.action_type
             return None
 
+    def update_actions(self, current_action_points):
+        """
+        Met à jour les différentes actions disponibles
+        """
+        if current_action_points < 1:
+            for action in self.actions_list:
+                action.active = False
+        elif current_action_points < 2:
+            self.magic_action.active = False
+            self.special_attack_action.active = False
+
     def draw_action(self, action):
         """
         Dessine les différentes actions sur la surface
