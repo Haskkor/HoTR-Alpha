@@ -31,7 +31,7 @@ class SquareBattlefield:
 
     def render_current(self):
         """
-        Héro courant : carré bleu électrique vide, bords solides, 44*44
+        Héro courant, carré bleu électrique vide, bords solides, 44*44
         """
         self.pos_x = self.orig_pos_x + constants.SquareBattlefield.SQUARE // 2 - constants.SquareBattlefield.HEROES // 2
         self.pos_y = self.orig_pos_y + constants.SquareBattlefield.SQUARE // 2 - constants.SquareBattlefield.HEROES // 2
@@ -42,6 +42,40 @@ class SquareBattlefield:
                                                                        constants.SquareBattlefield.HEROES - 1),
                          constants.SquareBattlefield.THICK_SMALL)
         self.state = StateSquareBattlefield.current
+        self.update_rect()
+
+    def render_current_hovered(self):
+        """
+        Héro courant survolé, rond bleu électrique, vide, diamètre 44
+        """
+        self.pos_x = self.orig_pos_x
+        self.pos_y = self.orig_pos_y
+        self.render = pygame.Surface((constants.SquareBattlefield.SQUARE, constants.SquareBattlefield.SQUARE),
+                                     pygame.SRCALPHA)
+        self.render.fill(constants.Colors.BLACK_FULL_ALPHA)
+
+        pygame.draw.circle(self.render, constants.Colors.ELECTRIC_BLUE, (constants.SquareBattlefield.SQUARE // 2,
+                                                                         constants.SquareBattlefield.SQUARE // 2),
+                           constants.SquareBattlefield.CIRCLE_HEROES, constants.SquareBattlefield.THICK_SMALL)
+        self.state = StateSquareBattlefield.current_hovered
+        self.update_rect()
+
+    def render_current_selected(self):
+        """
+        Héro courant sélectionné, rond bleu électrique légèrement transparent, bords solides, diamètre 44
+        """
+        self.pos_x = self.orig_pos_x
+        self.pos_y = self.orig_pos_y
+        self.render = pygame.Surface((constants.SquareBattlefield.SQUARE, constants.SquareBattlefield.SQUARE),
+                                     pygame.SRCALPHA)
+        self.render.fill(constants.Colors.BLACK_FULL_ALPHA)
+        pygame.draw.circle(self.render, constants.Colors.ELECTRIC_BLUE_150_ALPHA,
+                           (constants.SquareBattlefield.SQUARE // 2, constants.SquareBattlefield.SQUARE // 2),
+                           constants.SquareBattlefield.CIRCLE_HEROES, 0)
+        pygame.draw.circle(self.render, constants.Colors.ELECTRIC_BLUE, (constants.SquareBattlefield.SQUARE // 2,
+                                                                         constants.SquareBattlefield.SQUARE // 2),
+                           constants.SquareBattlefield.CIRCLE_HEROES, constants.SquareBattlefield.THICK_SMALL)
+        self.state = StateSquareBattlefield.current_selected
         self.update_rect()
 
     def render_hero(self):
@@ -91,6 +125,54 @@ class SquareBattlefield:
                                                                 constants.SquareBattlefield.SQUARE // 2),
                            constants.SquareBattlefield.CIRCLE_HEROES, constants.SquareBattlefield.THICK_SMALL)
         self.state = StateSquareBattlefield.hero_hovered
+        self.update_rect()
+
+    def render_foe(self):
+        """
+        Ennemi inactif, carré rouge vide, bords solides, 44*44
+        """
+        self.pos_x = self.orig_pos_x + constants.SquareBattlefield.SQUARE // 2 - constants.SquareBattlefield.HEROES // 2
+        self.pos_y = self.orig_pos_y + constants.SquareBattlefield.SQUARE // 2 - constants.SquareBattlefield.HEROES // 2
+        self.render = pygame.Surface((constants.SquareBattlefield.HEROES, constants.SquareBattlefield.HEROES),
+                                     pygame.SRCALPHA)
+        self.render.fill(constants.Colors.BLACK_FULL_ALPHA)
+        pygame.draw.rect(self.render, constants.Colors.DARK_RED, (0, 0, constants.SquareBattlefield.HEROES - 1,
+                                                                  constants.SquareBattlefield.HEROES - 1),
+                         constants.SquareBattlefield.THICK_SMALL)
+        self.state = StateSquareBattlefield.foe
+        self.update_rect()
+
+    def render_foe_hovered(self):
+        """
+        Ennemi survolé, rond rouge, vide, diamètre 44
+        """
+        self.pos_x = self.orig_pos_x
+        self.pos_y = self.orig_pos_y
+        self.render = pygame.Surface((constants.SquareBattlefield.SQUARE, constants.SquareBattlefield.SQUARE),
+                                     pygame.SRCALPHA)
+        self.render.fill(constants.Colors.BLACK_FULL_ALPHA)
+        pygame.draw.circle(self.render, constants.Colors.RED, (constants.SquareBattlefield.SQUARE // 2,
+                                                               constants.SquareBattlefield.SQUARE // 2),
+                           constants.SquareBattlefield.CIRCLE_HEROES, constants.SquareBattlefield.THICK_SMALL)
+        self.state = StateSquareBattlefield.foe_hovered
+        self.update_rect()
+
+    def render_foe_selected(self):
+        """
+        Ennemi sélectionné, rond rouge légèrement transparent, bords solides, diamètre 44
+        """
+        self.pos_x = self.orig_pos_x
+        self.pos_y = self.orig_pos_y
+        self.render = pygame.Surface((constants.SquareBattlefield.SQUARE, constants.SquareBattlefield.SQUARE),
+                                     pygame.SRCALPHA)
+        self.render.fill(constants.Colors.BLACK_FULL_ALPHA)
+        pygame.draw.circle(self.render, constants.Colors.RED_150_ALPHA, (constants.SquareBattlefield.SQUARE // 2,
+                                                                         constants.SquareBattlefield.SQUARE // 2),
+                           constants.SquareBattlefield.CIRCLE_HEROES, 0)
+        pygame.draw.circle(self.render, constants.Colors.RED, (constants.SquareBattlefield.SQUARE // 2,
+                                                               constants.SquareBattlefield.SQUARE // 2),
+                           constants.SquareBattlefield.CIRCLE_HEROES, constants.SquareBattlefield.THICK_SMALL)
+        self.state = StateSquareBattlefield.foe_selected
         self.update_rect()
 
     def render_available(self):
@@ -150,7 +232,7 @@ class SquareBattlefield:
 
     def render_hero_attack(self):
         """
-        Case disponible pour attaque, carré orange, vide, bords solides, 25*25
+        Case disponible pour l'attaque, carré orange, vide, bords solides, 25*25
         """
         self.pos_x = \
             self.orig_pos_x + constants.SquareBattlefield.SQUARE // 2 - constants.SquareBattlefield.LITTLE_SQUARE // 2
@@ -169,22 +251,22 @@ class SquareBattlefield:
         """
         Case disponible pour l'attaque avec ennemi, carré orange légèrement transparent, bords solides, 44*44
         """
-        self.pos_x = self.orig_pos_x + constants.SquareBattlefield.SQUARE // 2 - constants.SquareBattlefield.HEROES // 2
-        self.pos_y = self.orig_pos_y + constants.SquareBattlefield.SQUARE // 2 - constants.SquareBattlefield.HEROES // 2
-        self.render = pygame.Surface((constants.SquareBattlefield.HEROES, constants.SquareBattlefield.HEROES),
+        self.pos_x = self.orig_pos_x
+        self.pos_y = self.orig_pos_y
+        self.render = pygame.Surface((constants.SquareBattlefield.SQUARE, constants.SquareBattlefield.SQUARE),
                                      pygame.SRCALPHA)
         self.render.fill(constants.Colors.ORANGE_RED_150_ALPHA)
         pygame.draw.rect(self.render, constants.Colors.ORANGE_RED, (0, 0, constants.SquareBattlefield.SQUARE - 1,
-                                                                       constants.SquareBattlefield.SQUARE - 1),
+                                                                    constants.SquareBattlefield.SQUARE - 1),
                          constants.SquareBattlefield.THICK_SMALL)
         self.state = StateSquareBattlefield.hero_attack_with_foe
         self.update_rect()
 
     def render_hero_attack_with_foe_hovered(self):
         """
-        Case disponible pour l'attaque avec ennemi survolée, rond orange légèrement transparent, bords solide, diamètre 44
+        Case disponible pour l'attaque avec ennemi survolée, rond orange légèrement transparent, bords solides,
+        diamètre 44
         """
-
         self.pos_x = self.orig_pos_x
         self.pos_y = self.orig_pos_y
         self.render = pygame.Surface((constants.SquareBattlefield.SQUARE, constants.SquareBattlefield.SQUARE),
@@ -194,14 +276,14 @@ class SquareBattlefield:
                            (constants.SquareBattlefield.SQUARE // 2, constants.SquareBattlefield.SQUARE // 2),
                            constants.SquareBattlefield.CIRCLE_HEROES, 0)
         pygame.draw.circle(self.render, constants.Colors.ORANGE_RED, (constants.SquareBattlefield.SQUARE // 2,
-                                                                         constants.SquareBattlefield.SQUARE // 2),
+                                                                      constants.SquareBattlefield.SQUARE // 2),
                            constants.SquareBattlefield.CIRCLE_HEROES, constants.SquareBattlefield.THICK_SMALL)
         self.state = StateSquareBattlefield.hero_attack_with_foe_hovered
         self.update_rect()
 
     def render_hero_magic(self):
         """
-        Case disponible pour magie, carré violet, intérieur gris très transparent, bords solides, 25*25
+        Case disponible pour la magie, carré violet, intérieur gris très transparent, bords solides, 25*25
         """
         self.pos_x = \
             self.orig_pos_x + constants.SquareBattlefield.SQUARE // 2 - constants.SquareBattlefield.LITTLE_SQUARE // 2
@@ -216,52 +298,174 @@ class SquareBattlefield:
         self.state = StateSquareBattlefield.hero_magic
         self.update_rect()
 
-    def render_foe(self):
+    def render_hero_magic_with_foe(self):
         """
-        Ennemi inactif, carré rouge vide, bords solides, 44*44
+        Case disponible pour la magie avec ennemi, carré violet légèrement transparent, bords solides, 44*44
         """
-        self.pos_x = self.orig_pos_x + constants.SquareBattlefield.SQUARE // 2 - constants.SquareBattlefield.HEROES // 2
-        self.pos_y = self.orig_pos_y + constants.SquareBattlefield.SQUARE // 2 - constants.SquareBattlefield.HEROES // 2
-        self.render = pygame.Surface((constants.SquareBattlefield.HEROES, constants.SquareBattlefield.HEROES),
+        self.pos_x = self.orig_pos_x
+        self.pos_y = self.orig_pos_y
+        self.render = pygame.Surface((constants.SquareBattlefield.SQUARE, constants.SquareBattlefield.SQUARE),
                                      pygame.SRCALPHA)
-        self.render.fill(constants.Colors.BLACK_FULL_ALPHA)
-        pygame.draw.rect(self.render, constants.Colors.DARK_RED, (0, 0, constants.SquareBattlefield.HEROES - 1,
-                                                                  constants.SquareBattlefield.HEROES - 1),
+        self.render.fill(constants.Colors.PURPLE_150_ALPHA)
+        pygame.draw.rect(self.render, constants.Colors.PURPLE, (0, 0, constants.SquareBattlefield.SQUARE - 1,
+                                                                constants.SquareBattlefield.SQUARE - 1),
                          constants.SquareBattlefield.THICK_SMALL)
-        self.state = StateSquareBattlefield.foe
+        self.state = StateSquareBattlefield.hero_magic_with_foe
         self.update_rect()
 
-    def render_foe_hovered(self):
+    def render_hero_magic_with_foe_hovered(self):
         """
-        Ennemi survolé, rond rouge, vide, diamètre 44
+        Case disponible pour la magie avec ennemi survolée, rond violet légèrement transparent, bords solides,
+        diamètre 44
         """
         self.pos_x = self.orig_pos_x
         self.pos_y = self.orig_pos_y
         self.render = pygame.Surface((constants.SquareBattlefield.SQUARE, constants.SquareBattlefield.SQUARE),
                                      pygame.SRCALPHA)
         self.render.fill(constants.Colors.BLACK_FULL_ALPHA)
-        pygame.draw.circle(self.render, constants.Colors.RED, (constants.SquareBattlefield.SQUARE // 2,
-                                                               constants.SquareBattlefield.SQUARE // 2),
-                           constants.SquareBattlefield.CIRCLE_HEROES, constants.SquareBattlefield.THICK_SMALL)
-        self.state = StateSquareBattlefield.foe_hovered
-        self.update_rect()
-
-    def render_foe_selected(self):
-        """
-        Ennemi sélectionné, rond rouge légèrement transparent, bords solides, diamètre 44
-        """
-        self.pos_x = self.orig_pos_x
-        self.pos_y = self.orig_pos_y
-        self.render = pygame.Surface((constants.SquareBattlefield.SQUARE, constants.SquareBattlefield.SQUARE),
-                                     pygame.SRCALPHA)
-        self.render.fill(constants.Colors.BLACK_FULL_ALPHA)
-        pygame.draw.circle(self.render, constants.Colors.RED_150_ALPHA, (constants.SquareBattlefield.SQUARE // 2,
-                                                                         constants.SquareBattlefield.SQUARE // 2),
+        pygame.draw.circle(self.render, constants.Colors.PURPLE_150_ALPHA,
+                           (constants.SquareBattlefield.SQUARE // 2, constants.SquareBattlefield.SQUARE // 2),
                            constants.SquareBattlefield.CIRCLE_HEROES, 0)
-        pygame.draw.circle(self.render, constants.Colors.RED, (constants.SquareBattlefield.SQUARE // 2,
-                                                               constants.SquareBattlefield.SQUARE // 2),
+        pygame.draw.circle(self.render, constants.Colors.PURPLE, (constants.SquareBattlefield.SQUARE // 2,
+                                                                  constants.SquareBattlefield.SQUARE // 2),
                            constants.SquareBattlefield.CIRCLE_HEROES, constants.SquareBattlefield.THICK_SMALL)
-        self.state = StateSquareBattlefield.foe_selected
+        self.state = StateSquareBattlefield.hero_magic_with_foe_hovered
+        self.update_rect()
+
+    def render_hero_ranged_attack(self):
+        """
+        Case disponible pour l'attaque à distance, carré violet, intérieur gris très transparent, bords solides, 25*25
+        """
+        self.pos_x = \
+            self.orig_pos_x + constants.SquareBattlefield.SQUARE // 2 - constants.SquareBattlefield.LITTLE_SQUARE // 2
+        self.pos_y = \
+            self.orig_pos_y + constants.SquareBattlefield.SQUARE // 2 - constants.SquareBattlefield.LITTLE_SQUARE // 2
+        self.render = pygame.Surface((constants.SquareBattlefield.LITTLE_SQUARE,
+                                      constants.SquareBattlefield.LITTLE_SQUARE), pygame.SRCALPHA)
+        self.render.fill(constants.Colors.BLACK_FULL_ALPHA)
+        pygame.draw.rect(self.render, constants.Colors.GREEN, (0, 0, constants.SquareBattlefield.LITTLE_SQUARE - 1,
+                                                               constants.SquareBattlefield.LITTLE_SQUARE - 1),
+                         constants.SquareBattlefield.THICK_BIG)
+        self.state = StateSquareBattlefield.hero_ranged_attack
+        self.update_rect()
+
+    def render_hero_ranged_attack_with_foe(self):
+        """
+        Case disponible pour l'attaque à distance avec ennemi, carré violet légèrement transparent, bords solides, 44*44
+        """
+        self.pos_x = self.orig_pos_x
+        self.pos_y = self.orig_pos_y
+        self.render = pygame.Surface((constants.SquareBattlefield.SQUARE, constants.SquareBattlefield.SQUARE),
+                                     pygame.SRCALPHA)
+        self.render.fill(constants.Colors.GREEN_150_ALPHA)
+        pygame.draw.rect(self.render, constants.Colors.GREEN, (0, 0, constants.SquareBattlefield.SQUARE - 1,
+                                                               constants.SquareBattlefield.SQUARE - 1),
+                         constants.SquareBattlefield.THICK_SMALL)
+        self.state = StateSquareBattlefield.hero_ranged_attack_with_foe
+        self.update_rect()
+
+    def render_hero_ranged_attack_with_foe_hovered(self):
+        """
+        Case disponible pour l'attaque à distance avec ennemi survolée, rond violet légèrement transparent,
+        bords solides, diamètre 44
+        """
+        self.pos_x = self.orig_pos_x
+        self.pos_y = self.orig_pos_y
+        self.render = pygame.Surface((constants.SquareBattlefield.SQUARE, constants.SquareBattlefield.SQUARE),
+                                     pygame.SRCALPHA)
+        self.render.fill(constants.Colors.BLACK_FULL_ALPHA)
+        pygame.draw.circle(self.render, constants.Colors.GREEN_150_ALPHA,
+                           (constants.SquareBattlefield.SQUARE // 2, constants.SquareBattlefield.SQUARE // 2),
+                           constants.SquareBattlefield.CIRCLE_HEROES, 0)
+        pygame.draw.circle(self.render, constants.Colors.GREEN, (constants.SquareBattlefield.SQUARE // 2,
+                                                                 constants.SquareBattlefield.SQUARE // 2),
+                           constants.SquareBattlefield.CIRCLE_HEROES, constants.SquareBattlefield.THICK_SMALL)
+        self.state = StateSquareBattlefield.hero_ranged_attack_with_foe_hovered
+        self.update_rect()
+
+    def render_hero_attack_armor(self):
+        """
+        Case disponible pour l'attaque contre l'armure, carré bronze, vide, bords solides, 25*25
+        """
+        self.pos_x = \
+            self.orig_pos_x + constants.SquareBattlefield.SQUARE // 2 - constants.SquareBattlefield.LITTLE_SQUARE // 2
+        self.pos_y = \
+            self.orig_pos_y + constants.SquareBattlefield.SQUARE // 2 - constants.SquareBattlefield.LITTLE_SQUARE // 2
+        self.render = pygame.Surface((constants.SquareBattlefield.LITTLE_SQUARE,
+                                      constants.SquareBattlefield.LITTLE_SQUARE), pygame.SRCALPHA)
+        self.render.fill(constants.Colors.BLACK_FULL_ALPHA)
+        pygame.draw.rect(self.render, constants.Colors.BRONZE, (0, 0, constants.SquareBattlefield.LITTLE_SQUARE - 1,
+                                                                constants.SquareBattlefield.LITTLE_SQUARE - 1),
+                         constants.SquareBattlefield.THICK_BIG)
+        self.state = StateSquareBattlefield.hero_attack_armor
+        self.update_rect()
+
+    def render_hero_attack_armor_with_foe(self):
+        """
+        Case disponible pour l'attaque avec ennemi, carré bronze légèrement transparent, bords solides, 44*44
+        """
+        self.pos_x = self.orig_pos_x
+        self.pos_y = self.orig_pos_y
+        self.render = pygame.Surface((constants.SquareBattlefield.SQUARE, constants.SquareBattlefield.SQUARE),
+                                     pygame.SRCALPHA)
+        self.render.fill(constants.Colors.BRONZE_150_ALPHA)
+        pygame.draw.rect(self.render, constants.Colors.BRONZE, (0, 0, constants.SquareBattlefield.SQUARE - 1,
+                                                                constants.SquareBattlefield.SQUARE - 1),
+                         constants.SquareBattlefield.THICK_SMALL)
+        self.state = StateSquareBattlefield.hero_attack_armor_with_foe
+        self.update_rect()
+
+    def render_hero_attack_armor_with_foe_hovered(self):
+        """
+        Case disponible pour l'attaque avec ennemi survolée, rond bronze légèrement transparent, bords solides,
+        diamètre 44
+        """
+        self.pos_x = self.orig_pos_x
+        self.pos_y = self.orig_pos_y
+        self.render = pygame.Surface((constants.SquareBattlefield.SQUARE, constants.SquareBattlefield.SQUARE),
+                                     pygame.SRCALPHA)
+        self.render.fill(constants.Colors.BLACK_FULL_ALPHA)
+        pygame.draw.circle(self.render, constants.Colors.BRONZE_150_ALPHA,
+                           (constants.SquareBattlefield.SQUARE // 2, constants.SquareBattlefield.SQUARE // 2),
+                           constants.SquareBattlefield.CIRCLE_HEROES, 0)
+        pygame.draw.circle(self.render, constants.Colors.BRONZE, (constants.SquareBattlefield.SQUARE // 2,
+                                                                  constants.SquareBattlefield.SQUARE // 2),
+                           constants.SquareBattlefield.CIRCLE_HEROES, constants.SquareBattlefield.THICK_SMALL)
+        self.state = StateSquareBattlefield.hero_attack_armor_with_foe_hovered
+        self.update_rect()
+
+    def render_hero_defense(self):
+        """
+        Case disponible pour la défense pour le héro, carré gris foncé légèrement transparent, bords solides, 44*44
+        """
+        self.pos_x = self.orig_pos_x
+        self.pos_y = self.orig_pos_y
+        self.render = pygame.Surface((constants.SquareBattlefield.SQUARE, constants.SquareBattlefield.SQUARE),
+                                     pygame.SRCALPHA)
+        self.render.fill(constants.Colors.LIGHT_GRAY_150_ALPHA)
+        pygame.draw.rect(self.render, constants.Colors.LIGHT_GRAY, (0, 0, constants.SquareBattlefield.SQUARE - 1,
+                                                                    constants.SquareBattlefield.SQUARE - 1),
+                         constants.SquareBattlefield.THICK_SMALL)
+        self.state = StateSquareBattlefield.hero_defense
+        self.update_rect()
+
+    def render_hero_defense_hovered(self):
+        """
+        Case disponible pour la défense pour le héro survolée, rond gris foncé légèrement transparent, bords solides,
+        diamètre 44
+        """
+        self.pos_x = self.orig_pos_x
+        self.pos_y = self.orig_pos_y
+        self.render = pygame.Surface((constants.SquareBattlefield.SQUARE, constants.SquareBattlefield.SQUARE),
+                                     pygame.SRCALPHA)
+        self.render.fill(constants.Colors.BLACK_FULL_ALPHA)
+        pygame.draw.circle(self.render, constants.Colors.LIGHT_GRAY_150_ALPHA,
+                           (constants.SquareBattlefield.SQUARE // 2, constants.SquareBattlefield.SQUARE // 2),
+                           constants.SquareBattlefield.CIRCLE_HEROES, 0)
+        pygame.draw.circle(self.render, constants.Colors.LIGHT_GRAY, (constants.SquareBattlefield.SQUARE // 2,
+                                                                      constants.SquareBattlefield.SQUARE // 2),
+                           constants.SquareBattlefield.CIRCLE_HEROES, constants.SquareBattlefield.THICK_SMALL)
+        self.state = StateSquareBattlefield.hero_defense_hovered
         self.update_rect()
 
     def render_none(self):
@@ -277,14 +481,6 @@ class SquareBattlefield:
         self.render.fill(constants.Colors.DARK_SLATE_GRAY_100_ALPHA)
         self.state = None
         self.update_rect()
-
-    def update_rect(self):
-        self.rect = self.render.get_rect()
-        self.rect.x = self.pos_x
-        self.rect.y = self.pos_y
-        if self.hero is not None:
-            self.hero.battlefield_rect.centerx = self.rect.centerx
-            self.hero.battlefield_rect.bottom = self.rect.centery + constants.SquareBattlefield.HEROES_MARGIN_BOT
 
     def manage_action_points(self, semi_movement):
         """
@@ -305,3 +501,11 @@ class SquareBattlefield:
             self.ap_movement_2_rect.centery = self.render.get_rect().centery
             self.render.blit(self.ap_movement_2, self.ap_movement_2_rect)
             self.movement_cost = 2
+
+    def update_rect(self):
+        self.rect = self.render.get_rect()
+        self.rect.x = self.pos_x
+        self.rect.y = self.pos_y
+        if self.hero is not None:
+            self.hero.battlefield_rect.centerx = self.rect.centerx
+            self.hero.battlefield_rect.bottom = self.rect.centery + constants.SquareBattlefield.HEROES_MARGIN_BOT

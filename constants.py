@@ -17,7 +17,16 @@ class ActionPointsZone:
 
 class ActionsSelectionZone:
     # Zone de sélection des actions disponibles
+    ACTION_1_MARGIN_Y = 10
+    ACTION_2_MARGIN_Y = 60
+    ACTION_3_MARGIN_Y = 110
+    ACTION_4_MARGIN_Y = 160
+    ACTION_5_MARGIN_Y = 210
+    ACTION_6_MARGIN_Y = 260
+    CIRCLE_RADIUS = 20
     HEIGHT = 350
+    MARGIN_ACTION_X = 20
+    MARGIN_TOOLTIP = 7
     WIDTH = 130
     ZONE_POS_Y = 0
 
@@ -61,7 +70,11 @@ class Colors:
     BLACK_150_ALPHA = (0, 0, 0, 150)
     BLACK_200_ALPHA = (0, 0, 0, 200)
     BLACK_FULL_ALPHA = (0, 0, 0, 0)
+    BRONZE = (140, 120, 83, 255)
+    BRONZE_150_ALPHA = (140, 120, 83, 150)
     DARK_RED = (102, 0, 0, 255)
+    DARK_GRAY = (31, 31, 31, 255)
+    DARK_GRAY_150_ALPHA = (31, 31, 31, 150)
     DARK_SLATE_GRAY = (47, 79, 79, 255)
     DARK_SLATE_GRAY_100_ALPHA = (47, 79, 79, 100)
     DARK_SLATE_GRAY_150_ALPHA = (47, 79, 79, 100)
@@ -69,9 +82,16 @@ class Colors:
     ELECTRIC_BLUE_150_ALPHA = (44, 117, 255, 150)
     GOLD = (255, 215, 0, 255)
     GOLD_150_ALPHA = (255, 215, 0, 150)
+    GOLDENROD = (205, 155, 29, 255)
+    GOLDENROD_150_ALPHA = (205, 155, 29, 150)
+    GREEN = (0, 153, 0, 255)
+    GREEN_150_ALPHA = (0, 153, 0, 150)
+    LIGHT_GRAY = (217, 217, 217, 255)
+    LIGHT_GRAY_150_ALPHA = (217, 217, 217, 150)
     ORANGE_RED = (255, 69, 0, 255)
     ORANGE_RED_150_ALPHA = (255, 69, 0, 150)
     OVERLAY_ALPHA = 220
+    PURPLE_150_ALPHA = (127, 0, 255, 150)
     PURPLE = (127, 0, 255, 255)
     RED = (255, 0, 0, 255)
     RED_150_ALPHA = (255, 0, 0, 150)
@@ -171,6 +191,7 @@ class ImagesPath:
     ACTION_POINT_UNUSED = r"assets\various\action_point_unused.png"
     ACTION_POINT_USED = r"assets\various\action_point_used.png"
     ATTACK_ACTION = r"assets\actions_tokens\attack_action.png"
+    ATTACK_ARMOR_ACTION = r"assets\actions_tokens\attack_armor_action.png"
     BACK_NAME_SELECT = r"assets\backgrounds\name_selection.png"
     B_S_S_SCREEN = r"assets\backgrounds\battle_size_selection.png"
     BACK_START_DEPLOYMENT = r"assets\various\back_start_deployment.png"
@@ -190,6 +211,7 @@ class ImagesPath:
     BUTTON_ARROW_UP_HOVERED = r"assets\buttons\arrow_up_hover.png"
     DECK = r"assets\various\deck.png"
     DEFENSE_ACTION = r"assets\actions_tokens\defense_action.png"
+    DEFENSE_ACTION_CONFIRMATION = r"assets\actions_tokens\defense_action_confirmation.png"
     FRAME_DETAILS = r"assets\various\frame_details.png"
     INTRO_SCREEN = r"assets\backgrounds\intro_screen.jpg"
     LOADING = r"assets\various\loading.png"
@@ -201,7 +223,6 @@ class ImagesPath:
     MOVEMENT_ACTION = r"assets\actions_tokens\movement_action.png"
     PRESS_TO_CONTINUE = r"assets\texts\press_to_continue.png"
     RANGED_ATTACK_ACTION = r"assets\actions_tokens\ranged_attack_action.png"
-    SPECIAL_ATTACK_ACTION = r"assets\actions_tokens\special_attack_action.png"
     T_S_SCREEN = r"assets\backgrounds\team_selection.jpg"
     ZOOM = r"assets\buttons\zoom.png"
     ZOOM_DISABLED = r"assets\buttons\zoom_disabled.png"

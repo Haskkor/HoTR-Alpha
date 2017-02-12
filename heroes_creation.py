@@ -1113,7 +1113,7 @@ def main():
             "agility": 5,
             "stamina": 5,
             "strength": 5,
-            "magic": 5,
+            "magic": 0,
             "mental": 5,
             "attack": 4,
             "cost": 45,

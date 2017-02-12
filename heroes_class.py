@@ -71,7 +71,7 @@ class Heroes:
         """
         Fabrique une liste comportant les actions disponibles
         """
-        actions_list = [ActionType.MOVEMENT, ActionType.DEFENSE, ActionType.ATTACK, ActionType.SPECIAL_ATTACK]
+        actions_list = [ActionType.MOVEMENT, ActionType.DEFENSE, ActionType.ATTACK, ActionType.ATTACK_ARMOR]
         if self.magic_points > 0:
             actions_list.append(ActionType.MAGIC)
         if self.scope > 0:

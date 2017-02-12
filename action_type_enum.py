@@ -9,9 +9,9 @@ class ActionType(Enum):
     """
 
     ATTACK = "Attack"
+    ATTACK_ARMOR = "Attack armor"
     DEFENSE = "Defense"
     MAGIC = "Magic"
     MOVEMENT = "Movement"
     NONE = "None"
     RANGED_ATTACK = "Ranged attack"
-    SPECIAL_ATTACK = "Special attack"

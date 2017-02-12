@@ -2,6 +2,8 @@ import heapq
 import constants
 
 __author__ = "Jérémy Farnault"
+
+
 # BASED ON THE A* ALGORITHM FROM LAURENT LUCE
 # (http://www.laurentluce.com/posts/solving-mazes-using-python-simple-recursivity-and-a-search/)
 
@@ -11,7 +13,7 @@ class AvailableSquares(object):
     CLASSE GENERANT LES APPELS A LA CLASS ASTAR
     """
 
-    def __init__(self, battlefield, hero_pos, max_distance):
+    def __init__(self, battlefield, hero_pos, max_distance, current_player=None, skip_foes=False):
         """
         Trouve les cases disponibles par rapport à la case sélectionnée et à la distance maximum
         Renvoie un dictionnaire avec comme clef les tuples de coordonnées et comme valeurs la distance
@@ -26,8 +28,7 @@ class AvailableSquares(object):
             else constants.Battle.COLUMNS_BF
         for i in range(start_i, end_i):
             for j in range(start_j, end_j):
-
-                a_star = AStar(battlefield, max_distance)
+                a_star = AStar(battlefield, max_distance, current_player, skip_foes)
                 if (i, j) != hero_pos and (i, j) not in a_star.obstacles:
                     a_star.init_grid(a_star.obstacles, hero_pos, (i, j))
                     result = a_star.solve()
@@ -50,9 +51,9 @@ class Square(object):
         self.sum_fsts_cste = 0
 
     def __lt__(self, other):
-            if isinstance(other, Square):
-                return self.sum_fsts_cste < other.sum_fsts_cste
-            return NotImplemented
+        if isinstance(other, Square):
+            return self.sum_fsts_cste < other.sum_fsts_cste
+        return NotImplemented
 
 
 class AStar(object):
@@ -60,7 +61,7 @@ class AStar(object):
     UTILISATION DE L'ALGORITHME A* POUR LE CALCUL DU CHEMIN LE PLUS COURT
     """
 
-    def __init__(self, battlefield, max_distance):
+    def __init__(self, battlefield, max_distance, current_player, skip_foes):
         # Carrés libres
         self.opened = []
         heapq.heapify(self.opened)
@@ -74,6 +75,8 @@ class AStar(object):
         self.grid_width = constants.Battle.COLUMNS_BF
         self.battlefield = battlefield
         self.max_distance = max_distance
+        self.current_player = current_player
+        self.skip_foes = skip_foes
         self.obstacles = self.find_obstacles(self.battlefield)
 
     def find_obstacles(self, battlefield):
@@ -83,7 +86,9 @@ class AStar(object):
         obstacles = []
         for i in range(self.grid_width):
             for j in range(self.grid_height):
-                if i < len(battlefield) and battlefield[i][j].hero is not None:
+                if i < len(battlefield) and battlefield[i][j].hero is not None and \
+                        (not self.skip_foes or (self.skip_foes and
+                                                battlefield[i][j].hero.player_name == self.current_player)):
                     obstacles.append((i, j))
         return obstacles
 
@@ -124,14 +129,14 @@ class AStar(object):
         Renvoie les cases adjacentes à une case donnée
         """
         squares = []
-        if square.x < self.grid_width-1:
-            squares.append(self.get_square(square.x+1, square.y))
+        if square.x < self.grid_width - 1:
+            squares.append(self.get_square(square.x + 1, square.y))
         if square.y > 0:
-            squares.append(self.get_square(square.x, square.y-1))
+            squares.append(self.get_square(square.x, square.y - 1))
         if square.x > 0:
-            squares.append(self.get_square(square.x-1, square.y))
-        if square.y < self.grid_height-1:
-            squares.append(self.get_square(square.x, square.y+1))
+            squares.append(self.get_square(square.x - 1, square.y))
+        if square.y < self.grid_height - 1:
+            squares.append(self.get_square(square.x, square.y + 1))
         return squares
 
     def get_path(self):

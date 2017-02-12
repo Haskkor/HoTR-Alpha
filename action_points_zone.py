@@ -1,5 +1,4 @@
 import pygame
-from django.contrib.gis.db.backends.postgis import const
 
 import constants
 
