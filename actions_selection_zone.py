@@ -77,7 +77,7 @@ class ActionsSelectionZone:
                     return action.action_type
             return None
 
-    def update_actions(self, current_action_points):
+    def update_actions(self, current_action_points, current_hero):
         """
         Met à jour les différentes actions disponibles
         """
@@ -86,6 +86,8 @@ class ActionsSelectionZone:
                 action.active = False
         elif current_action_points < 2:
             self.magic_action.active = False
+        if current_hero.is_defending:
+            self.defense_action.active = False
 
     def draw_action(self, action):
         """

@@ -187,7 +187,13 @@ class MultiLocalBattle:
                                 remove_selected = False
                                 # Clic sur un héro
                                 if self.battlefield[i][j].hero is not None:
-                                    self.selected_hero = self.battlefield[i][j].hero
+                                    # Sélectionne le héro si il n'est pas déjà sélectionné
+                                    if self.selected_hero != self.battlefield[i][j].hero:
+                                        self.selected_hero = self.battlefield[i][j].hero
+                                    # Si l'action choisie est la défense
+                                    if self.battlefield[i][j].hero == self.current_hero and self.battlefield[i][j].state == StateSquareBattlefield.hero_defense_hovered:
+                                        self.current_hero.is_defending = True
+                                        self.current_player_action_points -= 1
                                 # Clic sur une case disponible pour le mouvement
                                 elif self.battlefield[i][j].state == StateSquareBattlefield.available_hovered or self.battlefield[i][j].state == StateSquareBattlefield.available:
                                     self.selected_movement_tile = copy.copy(self.battlefield[i][j])
@@ -201,7 +207,8 @@ class MultiLocalBattle:
                                     self.battlefield[self.selected_hero.pos_bf_i][self.selected_hero.pos_bf_j].hero = None
                                     self.current_hero.pos_bf_i, self.current_hero.pos_bf_j = i, j
                                     self.calculate_actions_squares()
-                                    self.actions_selection_zone.update_actions(self.current_player_action_points)
+                                # Mise à jour de l'état de la zone de la sélection des actions
+                                self.actions_selection_zone.update_actions(self.current_player_action_points, self.current_hero)
                                 break
                     # Déselection du héro courant ou de la case choisie pour le mouvement
                     if remove_selected and self.selected_movement_tile is None:
@@ -218,8 +225,11 @@ class MultiLocalBattle:
         for elem in self.battlefield:
             for square in elem:
                 self.screen.blit(square.render, square.rect)
+                # Affiche les héros
                 if square.hero is not None:
                     self.screen.blit(square.hero.battlefield, square.hero.battlefield_rect)
+                    if square.hero.is_defending:
+                        square.hero.draw_defending_visual(self.screen)
         # Afficher le timer
         self.screen.blit(self.timer.render, self.timer.rect)
         # Affiche les éléments si le deck est fermé
@@ -455,6 +465,7 @@ class MultiLocalBattle:
         if from_timer:
             self.init_bar.end_turn()
         self.current_hero = self.init_bar.heroes_sorted[0]
+        self.current_hero.is_defending = False
         self.current_player_action_points = constants.Battle.ACTION_POINTS
         self.current_player = self.init_bar.heroes_sorted[0].player_name
         self.render_text_name = self.font_name.render(self.current_player, 1, constants.Colors.WHITE)

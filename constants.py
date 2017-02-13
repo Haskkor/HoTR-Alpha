@@ -160,6 +160,13 @@ class Framerate:
     FRAMERATE = 60
 
 
+class HeroesClass:
+    # Classe des héros
+    DEFENSE_CIRCLE_RADIUS = 11
+    DEFENSE_RECT = 30
+    DEFENSE_CIRCLE_THICK = 2
+
+
 class HeroesDeployment:
     # Déploiement des héros
     COLUMNS_BF = 16

@@ -56,6 +56,9 @@ class Heroes:
         self.name_text_inspected_rect = None
         self.pos_bf_i = None
         self.pos_bf_j = None
+        self.is_defending = False
+        self.defense_shield = None
+        self.defense_shield_rect = None
         self.process_kwargs(kwargs)
         self.actions_list = self.get_actions_list()
         self.process_fonts()
@@ -100,6 +103,8 @@ class Heroes:
         self.token_init_rect = self.token_init.get_rect()
         self.battlefield = pygame.image.load(self.battlefield_text)
         self.battlefield_rect = self.battlefield.get_rect()
+        self.defense_shield = pygame.image.load(constants.ImagesPath.DEFENSE_ACTION_CONFIRMATION)
+        self.defense_shield_rect = self.defense_shield.get_rect()
 
     def get_list_inspected(self, font):
         """
@@ -191,3 +196,24 @@ class Heroes:
         Renvoie le héros depuis une liste
         """
         return [elem for elem in list_heroes if elem.name == self.name][0]
+
+    def draw_defending_visual(self, screen):
+        """
+        Affiche un visuel sur le héro indiquant qu'il est en position défensive
+        """
+        render = pygame.Surface((constants.HeroesClass.DEFENSE_RECT, constants.HeroesClass.DEFENSE_RECT),
+                                pygame.SRCALPHA)
+        render.fill(constants.Colors.BLACK_FULL_ALPHA)
+        pygame.draw.circle(render, constants.Colors.GOLD_150_ALPHA, (constants.HeroesClass.DEFENSE_RECT // 2,
+                                                                     constants.HeroesClass.DEFENSE_RECT // 2),
+                           constants.HeroesClass.DEFENSE_CIRCLE_RADIUS, 0)
+        pygame.draw.circle(render, constants.Colors.GOLDENROD, (constants.HeroesClass.DEFENSE_RECT // 2,
+                                                                constants.HeroesClass.DEFENSE_RECT // 2),
+                           constants.HeroesClass.DEFENSE_CIRCLE_RADIUS, constants.HeroesClass.DEFENSE_CIRCLE_THICK)
+        self.defense_shield_rect.centerx = constants.HeroesClass.DEFENSE_RECT // 2
+        self.defense_shield_rect.centery = constants.HeroesClass.DEFENSE_RECT // 2
+        render.blit(self.defense_shield, self.defense_shield_rect)
+        render_rect = render.get_rect()
+        render_rect.centerx = self.battlefield_rect.centerx
+        render_rect.bottom = self.battlefield_rect.bottom
+        screen.blit(render, render_rect)
