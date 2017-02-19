@@ -257,7 +257,8 @@ class HeroesDeployment:
                                                  description=hero.description, token_text=hero.token_text,
                                                  miniature_text=hero.miniature_text, font_large=self.font_large,
                                                  token_init_text=hero.token_init_text, player_name=hero.player_name,
-                                                 battlefield_text=hero.battlefield_text))
+                                                 battlefield_text=hero.battlefield_text,
+                                                 attack_armor=hero.attack_armor))
             elif not hero.search_hero_in_list(team_to_return):
                 team_to_return.append(hero)
         team_to_return.sort(key=lambda data: data.name)

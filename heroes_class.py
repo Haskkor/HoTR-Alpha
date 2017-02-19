@@ -30,6 +30,7 @@ class Heroes:
         self.magic = None
         self.mental = None
         self.attack = None
+        self.attack_armor = None
         self.cost = None
         self.unique = None
         self.skills = None
@@ -119,6 +120,7 @@ class Heroes:
                      "Initiative : {}".format(self.initiative),
                      "Speed : {}".format(self.speed),
                      "Attack Points : {}".format(self.attack),
+                     "Attack Armor : {}".format(self.attack_armor),
                      "Range : {}".format(self.scope),
                      "Strength : {}".format(self.strength),
                      "Stamina : {}".format(self.stamina),
@@ -134,6 +136,7 @@ class Heroes:
         for attr in ["Initiative : {}".format(self.initiative),
                      "Speed : {}".format(self.speed),
                      "Attack Points : {}".format(self.attack),
+                     "Attack Armor : {}".format(self.attack_armor),
                      "Range : {}".format(self.scope),
                      "Strength : {}".format(self.strength),
                      "Stamina : {}".format(self.stamina),

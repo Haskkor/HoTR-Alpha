@@ -188,8 +188,11 @@ class HeroesDeployment:
 
 class HeroDetailsZone:
     # Zone de détail du héro
-    WIDTH = 300
+    BASE_MARGIN = 5
     HEIGHT = 150
+    POINTS_MARGIN = 85
+    SKILLS_MARGIN = 85
+    WIDTH = 350
 
 
 class ImagesPath:
@@ -333,6 +336,7 @@ class TeamSelection:
     DETAIL_INSPECTED_X = 770
     DETAILS_ZONE = 720
     DIFF_TOKEN_TEXT = 60
+    LARGE_SPACE_DETAILS = 20
     LIMIT_RIGHT = 710
     LINE_LENGTH = 7
     MARGIN_X = 100
@@ -341,6 +345,7 @@ class TeamSelection:
     NAME_INSPECTED_Y = 150
     NAME_MARGIN = 20
     SIZE_TEXT_MULTILINES = 39
+    SMALL_SPACE_DETAILS = 10
     SQUARE_HOVERED_DIFF = 5
     SQUARE_SELECTED_DIFF = 2
     START_DETAILS_Y = 190

@@ -71,7 +71,7 @@ class TeamSelection:
                        unique=stats["unique"], skills=stats["skills"], description=stats["description"],
                        token_text=stats["token_path"], miniature_text=stats["miniature_path"],
                        token_init_text=stats["token_init_path"], battlefield_text=stats["battlefield_path"],
-                       font_small=self.font_small, font_large=self.font_large))
+                       font_small=self.font_small, font_large=self.font_large, attack_armor=stats["attack_armor"]))
         # Trie la liste par ordre alphabétique, sélectionne le premier héros
         self.list_heroes = sorted(self.list_heroes, key=lambda hero: hero.name)
         self.list_heroes[0].is_inspected = True
@@ -333,9 +333,9 @@ class TeamSelection:
             self.screen.blit(detail, detail_rect)
         # Affiche les compétences
         skills_text = self.font_medium.render(constants.Texts.SKILLS, 1, constants.Colors.WHITE)
-        pos_details_y += skills_text.get_rect().height
+        pos_details_y += constants.TeamSelection.SMALL_SPACE_DETAILS
         self.screen.blit(skills_text, (constants.TeamSelection.DETAIL_INSPECTED_X, pos_details_y))
-        pos_details_y += skills_text.get_rect().height
+        pos_details_y += constants.TeamSelection.LARGE_SPACE_DETAILS
         for skill in self.current_hero.get_skills_inspected(self.font_small):
             skill_rect = skill.get_rect()
             skill_rect.left = constants.TeamSelection.DETAIL_INSPECTED_X

@@ -187,13 +187,26 @@ class MultiLocalBattle:
                                 remove_selected = False
                                 # Clic sur un héro
                                 if self.battlefield[i][j].hero is not None:
-                                    # Sélectionne le héro si il n'est pas déjà sélectionné
-                                    if self.selected_hero != self.battlefield[i][j].hero:
-                                        self.selected_hero = self.battlefield[i][j].hero
+
+
+
                                     # Si l'action choisie est la défense
-                                    if self.battlefield[i][j].hero == self.current_hero and self.battlefield[i][j].state == StateSquareBattlefield.hero_defense_hovered:
+                                    if self.battlefield[i][j].state == StateSquareBattlefield.hero_defense_hovered:
                                         self.current_hero.is_defending = True
                                         self.current_player_action_points -= 1
+                                    # Si l'action choisie est l'attaque contre l'armure
+                                    elif self.battlefield[i][j].state == StateSquareBattlefield.hero_attack_armor_with_foe_hovered:
+                                        if self.battlefield[i][j].hero.is_defending:
+                                            self.battlefield[i][j].hero.armor_current -= self.current_hero.attack_armor // 2
+                                        else:
+                                            self.battlefield[i][j].hero.armor_current -= self.current_hero.attack_armor
+                                        self.current_player_action_points -= 1
+
+
+
+                                    # Sélectionne le héro si il n'est pas déjà sélectionné
+                                    elif self.selected_hero != self.battlefield[i][j].hero:
+                                        self.selected_hero = self.battlefield[i][j].hero
                                 # Clic sur une case disponible pour le mouvement
                                 elif self.battlefield[i][j].state == StateSquareBattlefield.available_hovered or self.battlefield[i][j].state == StateSquareBattlefield.available:
                                     self.selected_movement_tile = copy.copy(self.battlefield[i][j])
@@ -243,14 +256,14 @@ class MultiLocalBattle:
             self.action_points_zone.draw(self.screen, self.current_player_action_points)
             # Affiche le visuel des actions sélectionnables
             self.actions_selection_zone.draw(self.screen, mouse_pos)
-            # Affiche les détails du héros sélectionné
-            if self.selected_hero is not None:
-                self.hero_details_zone.draw(self.screen, self.selected_hero)
             # Affiche la barre d'initiative
             if self.current_player == self.fplayer_name:
                 self.init_bar.draw(self.screen, mouse_pos, self.fplayer_name)
             else:
                 self.init_bar.draw(self.screen, mouse_pos, self.splayer_name)
+            # Affiche les détails du héros sélectionné
+            if self.selected_hero is not None:
+                self.hero_details_zone.draw(self.screen, self.selected_hero)
             # Affiche la carte du deck et son texte
             self.screen.blit(self.deck_image, self.deck_image_rect)
             if self.deck_image_rect.collidepoint(mouse_pos):
@@ -277,6 +290,24 @@ class MultiLocalBattle:
                 self.splayer_deck_visualization.draw(self.screen, mouse_pos)
         self.clock.tick(constants.Framerate.FRAMERATE)
         pygame.display.flip()
+
+
+
+
+    def draw_damage_points(self, battlefield_square, points):
+        """
+        Affiche un texte indiquant les dégats subis
+        """
+        text = self.font_name.render("{}".format(points), 1, constants.Colors.RED)
+        text_rect = text.get_rect()
+        text_rect.centerx = 500
+        text_rect.centery = 500
+        timer = pygame.time.get_ticks()
+        while pygame.time.get_ticks() < timer + 1000:
+            self.screen.blit(text, text_rect)
+
+
+
 
     def update_teams_points(self):
         """

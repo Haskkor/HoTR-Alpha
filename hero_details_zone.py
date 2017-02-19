@@ -30,7 +30,7 @@ class HeroDetailsZone:
         pos_details_y = selected_hero.token_rect.top
         for detail in selected_hero.get_basic_inspected_battle(self.font_small):
             detail_rect = detail.get_rect()
-            detail_rect.left = selected_hero.miniature_rect.right + 5
+            detail_rect.left = selected_hero.miniature_rect.right + constants.HeroDetailsZone.BASE_MARGIN
             detail_rect.top = pos_details_y
             pos_details_y += detail_rect.height
             self.surface.blit(detail, detail_rect)
@@ -38,15 +38,15 @@ class HeroDetailsZone:
         pos_details_y = selected_hero.token_rect.top
         for detail in selected_hero.get_points_inspected_battle(self.font_medium):
             detail_rect = detail.get_rect()
-            detail_rect.left = selected_hero.miniature_rect.right + 85
+            detail_rect.left = selected_hero.miniature_rect.right + constants.HeroDetailsZone.POINTS_MARGIN
             detail_rect.top = pos_details_y
             pos_details_y += detail_rect.height
             self.surface.blit(detail, detail_rect)
-        # Affiche les caractéristiques à points
+        # Affiche les compétences
         pos_details_y = 100
         for detail in selected_hero.get_skills_inspected(self.font_medium):
             detail_rect = detail.get_rect()
-            detail_rect.left = selected_hero.miniature_rect.right + 85
+            detail_rect.left = selected_hero.miniature_rect.right + constants.HeroDetailsZone.SKILLS_MARGIN
             detail_rect.top = pos_details_y
             pos_details_y += detail_rect.height
             self.surface.blit(detail, detail_rect)
