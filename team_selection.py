@@ -62,13 +62,13 @@ class TeamSelection:
         self.list_heroes = []
         for name, stats in self.heroes.items():
             self.list_heroes.append(
-                Heroes(name=name, speed=stats["speed"], initiative=stats["initiative"],
+                Heroes(name=name, speed=stats["speed"], initiative=stats["initiative"], stamina=stats["stamina"],
                        life_points=stats["life_points"], life_points_current=stats["life_points"],
                        magic_points=stats["magic_points"], magic_points_current=stats["magic_points"],
                        armor=stats["armor"], armor_current=stats["armor"], scope=stats["range"], size=stats["size"],
-                       agility=stats["agility"], stamina=stats["stamina"], strength=stats["strength"],
+                       agility=stats["agility"], description=stats["description"], strength=stats["strength"],
                        magic=stats["magic"], mental=stats["mental"], attack=stats["attack"], cost=stats["cost"],
-                       unique=stats["unique"], skills=stats["skills"], description=stats["description"],
+                       unique=stats["unique"], skills=stats["skills"], ranged_attack=stats["ranged_attack"],
                        token_text=stats["token_path"], miniature_text=stats["miniature_path"],
                        token_init_text=stats["token_init_path"], battlefield_text=stats["battlefield_path"],
                        font_small=self.font_small, font_large=self.font_large, attack_armor=stats["attack_armor"]))

@@ -222,6 +222,39 @@ class MultiLocalBattle:
                                         self.current_player_action_points -= 1
                                         if self.battlefield[i][j].hero.life_points_current < 0:
                                             self.battlefield[i][j].hero.life_points_current = 0
+                                    # Si l'action choisie est l'attaque à distance
+                                    elif self.battlefield[i][j].state == StateSquareBattlefield.hero_ranged_attack_with_foe_hovered:
+                                        if self.battlefield[i][j].hero.is_defending:
+                                            damages = max(0, (self.current_hero.ranged_attack - self.battlefield[i][j].hero.armor_current) // 2)
+                                        else:
+                                            damages = max(1, self.current_hero.ranged_attack - self.battlefield[i][j].hero.armor_current)
+                                        self.battlefield[i][j].hero.life_points_current -= damages
+                                        self.alteration_text = AlterationText(False, damages, AlterationType.LIFE_POINTS, self.battlefield[i][j].hero.battlefield_rect.centerx, self.battlefield[i][j].hero.battlefield_rect.bottom)
+                                        self.current_player_action_points -= 1
+                                        if self.battlefield[i][j].hero.life_points_current < 0:
+                                            self.battlefield[i][j].hero.life_points_current = 0
+
+
+
+
+
+                                    # Si l'action choisie est l'attaque magique
+                                    elif self.battlefield[i][j].state == StateSquareBattlefield.hero_magic_with_foe_hovered:
+                                        damages = max(0, self.current_hero.magic - self.battlefield[i][j].hero.mental)
+                                        self.battlefield[i][j].hero.life_points_current -= damages
+                                        self.alteration_text = AlterationText(False, damages, AlterationType.LIFE_POINTS, self.battlefield[i][j].hero.battlefield_rect.centerx, self.battlefield[i][j].hero.battlefield_rect.bottom)
+                                        self.current_player_action_points -= 1
+                                        self.current_hero.magic_points_current -= 1
+                                        if self.battlefield[i][j].hero.life_points_current < 0:
+                                            self.battlefield[i][j].hero.life_points_current = 0
+
+
+
+
+
+
+
+
                                     # Sélectionne le héro si il n'est pas déjà sélectionné
                                     elif self.selected_hero != self.battlefield[i][j].hero:
                                         self.selected_hero = self.battlefield[i][j].hero

@@ -55,7 +55,7 @@ class AlterationText:
         self.pos_y = pos_y
         self.color = switch_colors(action_type)
         self.sign = switch_signs(bonus)
-        self.text = self.font.render(self.sign + "{} ".format(number) + self.type, 1, self.color)
+        self.text = self.font.render(self.sign + "{} ".format(number) + self.type.value, 1, self.color)
         self.text_rect = self.text.get_rect()
         self.text_rect.centerx = self.pos_x
         self.text_rect.centery = self.pos_y

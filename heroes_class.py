@@ -24,12 +24,12 @@ class Heroes:
         self.armor_current = None
         self.scope = None
         self.size = None
-        self.agility = None
         self.stamina = None
         self.strength = None
         self.magic = None
         self.mental = None
         self.attack = None
+        self.ranged_attack = None
         self.attack_armor = None
         self.cost = None
         self.unique = None
@@ -120,11 +120,11 @@ class Heroes:
                      "Initiative : {}".format(self.initiative),
                      "Speed : {}".format(self.speed),
                      "Attack Points : {}".format(self.attack),
+                     "Ranged Attack : {}".format(self.ranged_attack),
                      "Attack Armor : {}".format(self.attack_armor),
                      "Range : {}".format(self.scope),
                      "Strength : {}".format(self.strength),
                      "Stamina : {}".format(self.stamina),
-                     "Agility : {}".format(self.agility),
                      "Magic : {}".format(self.magic),
                      "Mental : {}".format(self.mental)]:
             yield font.render(attr, 1, constants.Colors.WHITE)
@@ -136,11 +136,11 @@ class Heroes:
         for attr in ["Initiative : {}".format(self.initiative),
                      "Speed : {}".format(self.speed),
                      "Attack Points : {}".format(self.attack),
+                     "Ranged Attack : {}".format(self.ranged_attack),
                      "Attack Armor : {}".format(self.attack_armor),
                      "Range : {}".format(self.scope),
                      "Strength : {}".format(self.strength),
                      "Stamina : {}".format(self.stamina),
-                     "Agility : {}".format(self.agility),
                      "Magic : {}".format(self.magic),
                      "Mental : {}".format(self.mental)]:
             yield font.render(attr, 1, constants.Colors.WHITE)
