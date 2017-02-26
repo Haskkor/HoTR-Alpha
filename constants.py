@@ -31,6 +31,11 @@ class ActionsSelectionZone:
     ZONE_POS_Y = 0
 
 
+class AlterationText:
+    # Objets visuels des altérations
+    TIMER = 1500
+
+
 class Battle:
     # Bataille à deux joueurs en local
     ACTION_POINTS = 3

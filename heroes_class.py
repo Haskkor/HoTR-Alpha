@@ -149,9 +149,9 @@ class Heroes:
         """
         Renvoie les attributs à points du héros choisi pour l'affichage sur l'écran du déploiement ou de la bataille
         """
-        for attr in ["Life Points : {} / {}".format(self.life_points, self.life_points_current),
-                     "Magic Points : {} / {}".format(self.magic_points, self.magic_points_current),
-                     "Armor : {} / {}".format(self.armor, self.armor_current)]:
+        for attr in ["Life Points : {} / {}".format(self.life_points_current, self.life_points),
+                     "Magic Points : {} / {}".format(self.magic_points_current, self.magic_points),
+                     "Armor : {} / {}".format(self.armor_current, self.armor)]:
             yield font.render(attr, 1, constants.Colors.WHITE)
 
     def get_skills_inspected(self, font):

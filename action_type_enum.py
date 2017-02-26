@@ -5,7 +5,7 @@ __author__ = "Jérémy Farnault"
 
 class ActionType(Enum):
     """
-    ENUM DES DIFFERENTS ETATS POSSIBLES POUR LES CASES DU CHAMP DE BATAILLE
+    ENUM DES DIFFERENTS ACTIONS POSSIBLES POUR LES HEROS
     """
 
     ATTACK = "Attack"
