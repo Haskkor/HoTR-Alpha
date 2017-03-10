@@ -254,6 +254,8 @@ class InitiativeBar:
     HEIGHT = 450
     LINE_THICK = 2
     MAX_HERO_LEN = 10
+    POS_X = 100
+    POS_Y = 450
     SIZE_X_RECT = 425
     SIZE_Y_RECT = 10
     SIZE_LINE_TOKEN = 10

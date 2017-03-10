@@ -133,7 +133,7 @@ class MultiLocalBattle:
         self.render_text_name_rect.bottom = self.deck_image_rect.bottom
         self.calculate_actions_squares()
         # Affiche les modifications infligés au héro ciblé
-        self.alteration_text = None
+        self.list_alteration_text = []
         self.run()
 
     def get_event(self, events, mouse_pos):
@@ -194,12 +194,14 @@ class MultiLocalBattle:
                         for j in range(constants.HeroesDeployment.COLUMNS_BF):
                             if self.battlefield[i][j].rect.collidepoint(mouse_pos) and self.battlefield[i][j].state is not None:
                                 remove_selected = False
+                                # Points d'actions dépensés sur l'action en cours
+                                lost_action_points = 0
                                 # Clic sur un héro
                                 if self.battlefield[i][j].hero is not None:
                                     # Si l'action choisie est la défense
                                     if self.battlefield[i][j].state == StateSquareBattlefield.hero_defense_hovered:
                                         self.current_hero.is_defending = True
-                                        self.current_player_action_points -= 1
+                                        lost_action_points = 1
                                     # Si l'action choisie est l'attaque contre l'armure
                                     elif self.battlefield[i][j].state == StateSquareBattlefield.hero_attack_armor_with_foe_hovered:
                                         if self.battlefield[i][j].hero.is_defending:
@@ -207,8 +209,8 @@ class MultiLocalBattle:
                                         else:
                                             damages = self.current_hero.attack_armor
                                         self.battlefield[i][j].hero.armor_current -= damages
-                                        self.alteration_text = AlterationText(False, damages, AlterationType.ARMOR_POINTS, self.battlefield[i][j].hero.battlefield_rect.centerx, self.battlefield[i][j].hero.battlefield_rect.bottom)
-                                        self.current_player_action_points -= 1
+                                        self.list_alteration_text.append(AlterationText(False, damages, AlterationType.ARMOR_POINTS, self.battlefield[i][j].hero.battlefield_rect.centerx, self.battlefield[i][j].hero.battlefield_rect.bottom))
+                                        lost_action_points = 1
                                         if self.battlefield[i][j].hero.armor_current < 0:
                                             self.battlefield[i][j].hero.armor_current = 0
                                     # Si l'action choisie est l'attaque
@@ -218,10 +220,13 @@ class MultiLocalBattle:
                                         else:
                                             damages = max(1, self.current_hero.attack - self.battlefield[i][j].hero.armor_current)
                                         self.battlefield[i][j].hero.life_points_current -= damages
-                                        self.alteration_text = AlterationText(False, damages, AlterationType.LIFE_POINTS, self.battlefield[i][j].hero.battlefield_rect.centerx, self.battlefield[i][j].hero.battlefield_rect.bottom)
-                                        self.current_player_action_points -= 1
-                                        if self.battlefield[i][j].hero.life_points_current < 0:
-                                            self.battlefield[i][j].hero.life_points_current = 0
+                                        self.list_alteration_text.append(AlterationText(False, damages, AlterationType.LIFE_POINTS, self.battlefield[i][j].hero.battlefield_rect.centerx, self.battlefield[i][j].hero.battlefield_rect.bottom))
+                                        lost_action_points = 1
+                                        # Si le héro visé n'a plus de PV
+                                        if self.battlefield[i][j].hero.life_points_current <= 0:
+
+
+
                                     # Si l'action choisie est l'attaque à distance
                                     elif self.battlefield[i][j].state == StateSquareBattlefield.hero_ranged_attack_with_foe_hovered:
                                         if self.battlefield[i][j].hero.is_defending:
@@ -229,12 +234,10 @@ class MultiLocalBattle:
                                         else:
                                             damages = max(1, self.current_hero.ranged_attack - self.battlefield[i][j].hero.armor_current)
                                         self.battlefield[i][j].hero.life_points_current -= damages
-                                        self.alteration_text = AlterationText(False, damages, AlterationType.LIFE_POINTS, self.battlefield[i][j].hero.battlefield_rect.centerx, self.battlefield[i][j].hero.battlefield_rect.bottom)
-                                        self.current_player_action_points -= 1
-                                        if self.battlefield[i][j].hero.life_points_current < 0:
-                                            self.battlefield[i][j].hero.life_points_current = 0
-
-
+                                        self.list_alteration_text.append(AlterationText(False, damages, AlterationType.LIFE_POINTS, self.battlefield[i][j].hero.battlefield_rect.centerx, self.battlefield[i][j].hero.battlefield_rect.bottom))
+                                        lost_action_points = 1
+                                        # Si le héro visé n'a plus de PV
+                                        if self.battlefield[i][j].hero.life_points_current <= 0:
 
 
 
@@ -242,19 +245,17 @@ class MultiLocalBattle:
                                     elif self.battlefield[i][j].state == StateSquareBattlefield.hero_magic_with_foe_hovered:
                                         damages = max(0, self.current_hero.magic - self.battlefield[i][j].hero.mental)
                                         self.battlefield[i][j].hero.life_points_current -= damages
-                                        self.alteration_text = AlterationText(False, damages, AlterationType.LIFE_POINTS, self.battlefield[i][j].hero.battlefield_rect.centerx, self.battlefield[i][j].hero.battlefield_rect.bottom)
-                                        self.current_player_action_points -= 1
+                                        self.list_alteration_text.append(AlterationText(False, damages, AlterationType.LIFE_POINTS, self.battlefield[i][j].hero.battlefield_rect.centerx, self.battlefield[i][j].hero.battlefield_rect.bottom))
+                                        lost_action_points = 1
                                         self.current_hero.magic_points_current -= 1
+                                        self.list_alteration_text.append(AlterationText(False, 1, AlterationType.MAGIC_POINTS, self.current_hero.battlefield_rect.centerx, self.current_hero.battlefield_rect.bottom))
+                                        # Si le héro visé n'a plus de PV
                                         if self.battlefield[i][j].hero.life_points_current < 0:
-                                            self.battlefield[i][j].hero.life_points_current = 0
 
 
 
-
-
-
-
-
+                                        if self.current_hero.magic_points_current <= 0:
+                                            self.current_hero.magic_points_current = 0
                                     # Sélectionne le héro si il n'est pas déjà sélectionné
                                     elif self.selected_hero != self.battlefield[i][j].hero:
                                         self.selected_hero = self.battlefield[i][j].hero
@@ -273,6 +274,9 @@ class MultiLocalBattle:
                                         self.selected_hero.pos_bf_j].hero = None
                                     self.current_hero.pos_bf_i, self.current_hero.pos_bf_j = i, j
                                     self.calculate_actions_squares()
+                                if lost_action_points > 0:
+                                    self.current_player_action_points -= lost_action_points
+                                    self.list_alteration_text.append(AlterationText(False, lost_action_points, AlterationType.ACTION_POINTS, self.current_hero.battlefield_rect.centerx, self.current_hero.battlefield_rect.bottom))
                                 # Mise à jour de l'état de la zone de la sélection des actions et de l'action sélectionnée
                                 self.actions_selection_zone.update_actions(self.current_player_action_points,
                                                                            self.current_hero)
@@ -338,10 +342,14 @@ class MultiLocalBattle:
             else:
                 self.screen.blit(self.button_draw.render_inactive, self.button_draw.rect)
             # Affiche le texte indiquant les modifications sur le héro ciblé
-            if self.alteration_text is not None:
-                self.alteration_text.draw(self.screen)
-                if self.alteration_text.timer == 0:
-                    self.alteration_text = None
+            if len(self.list_alteration_text) > 0:
+                alterations_to_remove = []
+                for alteration_text in self.list_alteration_text:
+                    alteration_text.draw(self.screen)
+                    if alteration_text.timer == 0:
+                        alterations_to_remove.append(alteration_text)
+                for alteration_to_remove in alterations_to_remove:
+                    self.list_alteration_text.remove(alteration_to_remove)
         # Affiche la visualisation des cartes du deck
         else:
             if self.current_player == self.fplayer_name:
