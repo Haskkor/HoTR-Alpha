@@ -21,8 +21,8 @@ class InitiativeBar:
         self.heroes_sorted = []
         self.surface = pygame.Surface((constants.InitiativeBar.WIDTH, constants.InitiativeBar.HEIGHT), pygame.SRCALPHA)
         self.surface_rect = self.surface.get_rect()
-        self.surface_rect.right = constants.Window.SCREEN_WIDTH // 2 - constants.InitiativeBar.WIDTH // 2
-        self.surface_rect.top = constants.Window.SCREEN_HEIGHT - constants.InitiativeBar.POS_Y
+        self.surface_rect.left = constants.Window.SCREEN_WIDTH // 2 - constants.InitiativeBar.WIDTH // 2
+        self.surface_rect.top = constants.Window.SCREEN_HEIGHT - constants.InitiativeBar.HEIGHT
         # Bouton pour afficher le reste des héros
         right = constants.InitiativeBar.START_X_RECT - constants.InitiativeBar.BUTTON_MARGIN
         centery = constants.InitiativeBar.START_Y_LINE
@@ -114,6 +114,12 @@ class InitiativeBar:
         self.heroes_sorted.append(self.heroes_sorted[0])
         del self.heroes_sorted[0]
         self.first_up = not self.first_up
+
+    def delete_dead_hero(self, hero):
+        """
+        Supprime un héro de la liste quand il est mort
+        """
+        self.heroes_sorted.remove(hero)
 
     def get_event(self, event, mouse_pos):
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:

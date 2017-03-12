@@ -22,10 +22,13 @@ class SquareBattlefield:
         self.rect = None
         self.hero = None
         self.state = None
+        self.has_grave = False
         self.ap_movement_1 = pygame.image.load(constants.ImagesPath.ACTION_POINT_MOUSE_PATH)
         self.ap_movement_1_rect = self.ap_movement_1.get_rect()
         self.ap_movement_2 = pygame.image.load(constants.ImagesPath.ACTION_POINT_MOUSE_PATH)
         self.ap_movement_2_rect = self.ap_movement_2.get_rect()
+        self.grave_icon = pygame.image.load(constants.ImagesPath.GRAVE)
+        self.grave_icon_rect = self.grave_icon.get_rect()
         self.movement_cost = 0
         self.update_rect()
 
@@ -466,6 +469,19 @@ class SquareBattlefield:
                                                                       constants.SquareBattlefield.SQUARE // 2),
                            constants.SquareBattlefield.CIRCLE_HEROES, constants.SquareBattlefield.THICK_SMALL)
         self.state = StateSquareBattlefield.hero_defense_hovered
+        self.update_rect()
+
+    def render_grave(self):
+        """
+        Affiche une tombe à l'emplacement d'un héro mort
+        """
+        self.render = pygame.Surface((constants.SquareBattlefield.SQUARE, constants.SquareBattlefield.SQUARE),
+                                     pygame.SRCALPHA)
+        self.render.fill(constants.Colors.BLACK_FULL_ALPHA)
+        self.grave_icon_rect.centerx = self.render.get_rect().centerx
+        self.grave_icon_rect.centery = self.render.get_rect().centery
+        self.render.blit(self.grave_icon, self.grave_icon_rect)
+        self.state = StateSquareBattlefield.grave
         self.update_rect()
 
     def render_none(self):

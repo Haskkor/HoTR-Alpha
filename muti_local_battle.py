@@ -224,9 +224,7 @@ class MultiLocalBattle:
                                         lost_action_points = 1
                                         # Si le héro visé n'a plus de PV
                                         if self.battlefield[i][j].hero.life_points_current <= 0:
-
-
-
+                                            self.kill_hero(self.battlefield[i][j].hero, i, j)
                                     # Si l'action choisie est l'attaque à distance
                                     elif self.battlefield[i][j].state == StateSquareBattlefield.hero_ranged_attack_with_foe_hovered:
                                         if self.battlefield[i][j].hero.is_defending:
@@ -238,9 +236,7 @@ class MultiLocalBattle:
                                         lost_action_points = 1
                                         # Si le héro visé n'a plus de PV
                                         if self.battlefield[i][j].hero.life_points_current <= 0:
-
-
-
+                                            self.kill_hero(self.battlefield[i][j].hero, i, j)
                                     # Si l'action choisie est l'attaque magique
                                     elif self.battlefield[i][j].state == StateSquareBattlefield.hero_magic_with_foe_hovered:
                                         damages = max(0, self.current_hero.magic - self.battlefield[i][j].hero.mental)
@@ -251,9 +247,7 @@ class MultiLocalBattle:
                                         self.list_alteration_text.append(AlterationText(False, 1, AlterationType.MAGIC_POINTS, self.current_hero.battlefield_rect.centerx, self.current_hero.battlefield_rect.bottom))
                                         # Si le héro visé n'a plus de PV
                                         if self.battlefield[i][j].hero.life_points_current < 0:
-
-
-
+                                            self.kill_hero(self.battlefield[i][j].hero, i, j)
                                         if self.current_hero.magic_points_current <= 0:
                                             self.current_hero.magic_points_current = 0
                                     # Sélectionne le héro si il n'est pas déjà sélectionné
@@ -441,14 +435,30 @@ class MultiLocalBattle:
             if self.current_hero.scope > 0:
                 self.calculate_available_ranged_squares()
 
+    def kill_hero(self, hero, pos_i, pos_j):
+        """
+        Supprime un héro n'ayant plus de points de vie.
+        Enlève le héro de la barre d'initiative, du champ de bataille et retranche son coût du total de points
+        """
+        if hero.player_name == self.fplayer_name:
+            self.fplayer_team.remove(hero)
+        else:
+            self.splayer_team.remove(hero)
+        self.battlefield[pos_i][pos_j].hero = None
+        self.battlefield[pos_i][pos_j].has_grave = True
+        self.init_bar.delete_dead_hero(hero)
+
     def update_battlefield(self, mouse_pos):
         """
         Met à jour les cases du champ de bataille
         """
         for i in range(constants.HeroesDeployment.LINES_BF):
             for j in range(constants.HeroesDeployment.COLUMNS_BF):
+                # Case avec une tombe
+                if self.battlefield[i][j].has_grave:
+                    self.battlefield[i][j].render_grave()
                 # Cases disponibles pour le déplacement
-                if self.selected_hero == self.current_hero and self.current_action == ActionType.MOVEMENT and (i, j) in self.available_movement_squares.keys():
+                elif self.selected_hero == self.current_hero and self.current_action == ActionType.MOVEMENT and (i, j) in self.available_movement_squares.keys():
                     temp_rect = pygame.Rect(self.battlefield[i][j].rect.left + 1, self.battlefield[i][j].rect.top + 1,
                                             self.battlefield[i][j].rect.width - 1,
                                             self.battlefield[i][j].rect.height - 1)

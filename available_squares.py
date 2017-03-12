@@ -86,9 +86,9 @@ class AStar(object):
         obstacles = []
         for i in range(self.grid_width):
             for j in range(self.grid_height):
-                if i < len(battlefield) and battlefield[i][j].hero is not None and \
-                        (not self.skip_foes or (self.skip_foes and
-                                                battlefield[i][j].hero.player_name == self.current_player)):
+                if i < len(battlefield) and (battlefield[i][j].has_grave or battlefield[i][j].hero is not None and
+                                             (not self.skip_foes or self.skip_foes and
+                                              battlefield[i][j].hero.player_name == self.current_player)):
                     obstacles.append((i, j))
         return obstacles
 

@@ -34,4 +34,5 @@ class StateSquareBattlefield(Enum):
     foe = "FOE"
     foe_hovered = "FOE_HOVERED"
     foe_selected = "FOE_SELECTED"
+    grave = "GRAVE"
     none = "NONE"

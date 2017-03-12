@@ -228,6 +228,7 @@ class ImagesPath:
     DEFENSE_ACTION = r"assets\actions_tokens\defense_action.png"
     DEFENSE_ACTION_CONFIRMATION = r"assets\actions_tokens\defense_action_confirmation.png"
     FRAME_DETAILS = r"assets\various\frame_details.png"
+    GRAVE = r"assets\various\grave.png"
     INTRO_SCREEN = r"assets\backgrounds\intro_screen.jpg"
     LOADING = r"assets\various\loading.png"
     MAGIC_ACTION = r"assets\actions_tokens\magic_action.png"
