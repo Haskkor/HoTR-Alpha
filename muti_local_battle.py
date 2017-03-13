@@ -246,7 +246,7 @@ class MultiLocalBattle:
                                         self.current_hero.magic_points_current -= 1
                                         self.list_alteration_text.append(AlterationText(False, 1, AlterationType.MAGIC_POINTS, self.current_hero.battlefield_rect.centerx, self.current_hero.battlefield_rect.bottom))
                                         # Si le héro visé n'a plus de PV
-                                        if self.battlefield[i][j].hero.life_points_current < 0:
+                                        if self.battlefield[i][j].hero.life_points_current <= 0:
                                             self.kill_hero(self.battlefield[i][j].hero, i, j)
                                         if self.current_hero.magic_points_current <= 0:
                                             self.current_hero.magic_points_current = 0
@@ -267,8 +267,8 @@ class MultiLocalBattle:
                                     self.battlefield[self.selected_hero.pos_bf_i][
                                         self.selected_hero.pos_bf_j].hero = None
                                     self.current_hero.pos_bf_i, self.current_hero.pos_bf_j = i, j
-                                    self.calculate_actions_squares()
                                 if lost_action_points > 0:
+                                    self.calculate_actions_squares()
                                     self.current_player_action_points -= lost_action_points
                                     self.list_alteration_text.append(AlterationText(False, lost_action_points, AlterationType.ACTION_POINTS, self.current_hero.battlefield_rect.centerx, self.current_hero.battlefield_rect.bottom))
                                 # Mise à jour de l'état de la zone de la sélection des actions et de l'action sélectionnée
